@@ -5,9 +5,7 @@ A modern hotel booking application built with React, featuring a clean UI and se
 ## Features
 
 - Browse available hotels with detailed information
-- View hotel amenities, ratings, and reviews
 - Responsive design for all devices
-- Interactive hotel cards with hover effects
 - Detailed hotel pages with image galleries
 - Location-based hotel search
 - Price filtering and sorting options
