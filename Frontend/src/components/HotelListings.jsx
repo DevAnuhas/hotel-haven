@@ -2,16 +2,37 @@ import { useState, useEffect } from "react";
 import HotelCard from "./HotelCard";
 import LocationTab from "./LocationTab";
 import { getHotels } from "@/lib/api/hotels";
-
+import SkeletonHotelCard from "./SkeletonHotelCard";
 export default function HotelListings() {
 	const [hotels, setHotels] = useState([]);
+	const [error, setError] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
+	/* 	useEffect(() => {
 		const fetchHotels = async () => {
-			const hotels = await getHotels();
-			setHotels(hotels);
+			try {
+				const hotels = await getHotels();
+				setHotels(hotels);
+			} catch (error) {
+				setError(error.message);
+			} finally {
+				setIsLoading(false);
+			}
 		};
 		fetchHotels();
+	}, []); */
+
+	useEffect(() => {
+		getHotels()
+			.then((hotels) => {
+				setHotels(hotels);
+			})
+			.catch((error) => {
+				setError(error.message);
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	}, []);
 
 	const locations = ["All", "France", "Australia", "Japan", "Italy"];
@@ -44,6 +65,10 @@ export default function HotelListings() {
 		return <HotelCard key={hotel._id} hotel={hotel} />;
 	});
 
+	const skeletonCards = Array.from({ length: 6 }, (_, index) => (
+		<SkeletonHotelCard key={index} />
+	));
+
 	return (
 		<section className="container w-full py-6 md:py-12 lg:py-16 mx-auto">
 			<div className="mb-6 space-y-3">
@@ -58,7 +83,14 @@ export default function HotelListings() {
 			</div>
 			<div className="flex items-center gap-x-4">{loacationsTab}</div>
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
-				{hotelCards}
+				{isLoading ? (
+					skeletonCards
+				) : (
+					<>
+						{error && <p>{error}</p>}
+						{hotelCards}
+					</>
+				)}
 			</div>
 		</section>
 	);
