@@ -1,8 +1,8 @@
-import Booking from "../infrastructure/schemas/Booking.js";
-import User from "../infrastructure/schemas/User.js";
+import Booking from "../infrastructure/schemas/Booking";
+import { Request, Response } from "express";
 
 // Create a new booking
-export const createBooking = async (req, res) => {
+export const createBooking = async (req: Request, res: Response) => {
 	const booking = req.body;
 
 	// Validate the request data
@@ -35,7 +35,7 @@ export const createBooking = async (req, res) => {
 	return;
 };
 
-export const getAllBookings = async (req, res) => {
+export const getAllBookings = async (req: Request, res: Response) => {
 	const bookings = await Booking.find();
 
 	if (!bookings) {
@@ -49,7 +49,7 @@ export const getAllBookings = async (req, res) => {
 	return;
 };
 
-export const getAllBookingsForHotel = async (req, res) => {
+export const getAllBookingsForHotel = async (req: Request, res: Response) => {
 	try {
 		const hotelId = req.params.hotelId;
 		const bookings = await Booking.find({ hotelId: hotelId })
@@ -58,6 +58,6 @@ export const getAllBookingsForHotel = async (req, res) => {
 		res.status(200).json(bookings);
 		return;
 	} catch (error) {
-		res.status(500).json({ error: error.message });
+		res.status(500).json({ error: (error as Error).message });
 	}
 };

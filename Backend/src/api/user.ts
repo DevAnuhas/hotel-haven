@@ -1,9 +1,15 @@
 import express from "express";
-import { getUsers, getUserById, createUser, deleteUser, updateUser } from "../application/user.js";
+import {
+	getUsers,
+	getUserById,
+	createUser,
+	deleteUser,
+	updateUser,
+} from "../application/user";
 
 const userRouter = express.Router();
 
-userRouter.get("/" , getUsers);
+userRouter.get("/", getUsers);
 userRouter.get("/:id", getUserById);
 userRouter.post("/", createUser);
 userRouter.delete("/:id", deleteUser);

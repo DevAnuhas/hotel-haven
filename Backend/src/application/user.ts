@@ -1,14 +1,15 @@
-import User from "../infrastructure/schemas/User.js";
+import User from "../infrastructure/schemas/User";
+import { Request, Response } from "express";
 
 // Get all users
-export const getUsers = async (req, res) => {
+export const getUsers = async (req: Request, res: Response) => {
 	const users = await User.find();
 	res.status(200).json(users);
 	return;
 };
 
 // Get a specific user (dynamic route)
-export const getUserById = async (req, res) => {
+export const getUserById = async (req: Request, res: Response) => {
 	const userId = req.params.id;
 	const user = await User.findById(userId);
 
@@ -24,7 +25,7 @@ export const getUserById = async (req, res) => {
 };
 
 // Add a new user
-export const createUser = async (req, res) => {
+export const createUser = async (req: Request, res: Response) => {
 	const user = req.body;
 
 	// Validate the request data
@@ -49,7 +50,7 @@ export const createUser = async (req, res) => {
 };
 
 // Delete a user
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req: Request, res: Response) => {
 	const userId = req.params.id;
 	const user = await User.findById(userId);
 
@@ -72,7 +73,7 @@ export const deleteUser = async (req, res) => {
 };
 
 // Update a user
-export const updateUser = async (req, res) => {
+export const updateUser = async (req: Request, res: Response) => {
 	const userId = req.params.id;
 	const updatedUser = req.body;
 	const user = await User.findById(userId);
