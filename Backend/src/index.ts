@@ -1,11 +1,11 @@
 import "dotenv/config";
-import connectDB from "./infrastructure/db.js";
+import connectDB from "./infrastructure/db";
 import express from "express";
 import cors from "cors";
 
-import hotelRouter from "./api/hotel.js";
-import userRouter from "./api/user.js";
-import bookingRouter from "./api/booking.js";
+import hotelRouter from "./api/hotel";
+import userRouter from "./api/user";
+import bookingRouter from "./api/booking";
 
 // Create an Express instance
 const app = express();
@@ -27,4 +27,4 @@ app.use("/api/booking", bookingRouter);
 
 // Define the port to run the server
 const PORT = 3000;
-app.listen(PORT, console.log(`Server is running on port ${PORT}...`));
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));

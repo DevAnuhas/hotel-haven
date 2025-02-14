@@ -1,19 +1,27 @@
 {
-  "name": "aidf-4-back-end",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "dev": "nodemon src/index.js"
-  },
-  "author": "",
-  "type": "module",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "mongoose": "^8.9.6",
-    "nodemon": "^3.1.9"
-  }
+	"name": "aidf-4-back-end",
+	"version": "1.0.0",
+	"main": "index.ts",
+	"scripts": {
+		"dev": "nodemon src/index.ts",
+		"start": "ts-node src/index.ts"
+	},
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
+		"express": "^4.21.2",
+		"mongoose": "^8.9.6"
+	},
+	"devDependencies": {
+		"@types/cors": "^2.8.17",
+		"@types/express": "^5.0.0",
+		"@types/mongoose": "^5.11.96",
+		"@types/node": "^22.13.4",
+		"nodemon": "^3.1.9",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.7.3"
+	}
 }

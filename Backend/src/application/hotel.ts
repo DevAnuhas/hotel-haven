@@ -1,5 +1,6 @@
-import Hotel from "../infrastructure/schemas/Hotel.js";
+import Hotel from "../infrastructure/schemas/Hotel";
 import mongoose from "mongoose";
+import { Request, Response } from "express";
 
 /* const hotels = [
 	{
@@ -109,12 +110,12 @@ import mongoose from "mongoose";
 ]; */
 
 // Sleep function for rate limiting or testing
-const sleep = (ms) => {
+const sleep = (ms: number) => {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 // Get all hotels
-export const getHotels = async (req, res) => {
+export const getHotels = async (req: Request, res: Response) => {
 	await sleep(1500);
 	const hotels = await Hotel.find();
 	res.status(200).json(hotels);
@@ -122,7 +123,7 @@ export const getHotels = async (req, res) => {
 };
 
 // Get a specific hotel (dynamic route)
-export const getHotelById = async (req, res) => {
+export const getHotelById = async (req: Request, res: Response) => {
 	const hotelId = req.params.id;
 
 	if (!mongoose.Types.ObjectId.isValid(hotelId)) {
@@ -145,7 +146,7 @@ export const getHotelById = async (req, res) => {
 };
 
 // Add a new hotel
-export const createHotel = async (req, res) => {
+export const createHotel = async (req: Request, res: Response) => {
 	const hotel = req.body;
 
 	// Validate the request data
@@ -183,7 +184,7 @@ export const createHotel = async (req, res) => {
 };
 
 // Delete a hotel
-export const deleteHotel = async (req, res) => {
+export const deleteHotel = async (req: Request, res: Response) => {
 	const hotelId = req.params.id;
 	const hotel = await Hotel.findById(hotelId);
 
@@ -206,7 +207,7 @@ export const deleteHotel = async (req, res) => {
 };
 
 // Update a hotel
-export const updateHotel = async (req, res) => {
+export const updateHotel = async (req: Request, res: Response) => {
 	const hotelId = req.params.id;
 	const updatedHotel = req.body;
 	const hotel = await Hotel.findById(hotelId);

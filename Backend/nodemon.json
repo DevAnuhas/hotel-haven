@@ -1,0 +1,7 @@
+{
+	"execMap": {
+		"ts": "ts-node -T"
+	},
+	"ext": "ts",
+	"ignore": ["node_modules/**", "dist/**"]
+}
