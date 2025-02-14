@@ -1,11 +1,12 @@
 import "dotenv/config";
 import connectDB from "./infrastructure/db";
-import express from "express";
+import express, { ErrorRequestHandler } from "express";
 import cors from "cors";
 
 import hotelRouter from "./api/hotel";
 import userRouter from "./api/user";
 import bookingRouter from "./api/booking";
+import globalErrorHandlingMiddleware from "./api/middlewares/global-error-handling-middleware";
 
 // Create an Express instance
 const app = express();
@@ -24,6 +25,8 @@ connectDB();
 app.use("/api/hotel", hotelRouter);
 app.use("/api/user", userRouter);
 app.use("/api/booking", bookingRouter);
+
+app.use(globalErrorHandlingMiddleware);
 
 // Define the port to run the server
 const PORT = 3000;
