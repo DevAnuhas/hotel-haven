@@ -1,37 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { useCreateHotelMutation } from "@/lib/api";
-import { toast } from "sonner";
+import { CreateHotelForm } from "@/components/CreateHotelForm";
 
 function CreateHotelPage() {
-	const [createHotel] = useCreateHotelMutation();
-
-	const handleClick = async () => {
-		const loadingToastId = toast.loading("Creating hotel...");
-		try {
-			await createHotel({
-				name: "Hotel Name",
-				description: "Hotel Description",
-				location: "City",
-				price: 100,
-				rating: 5,
-				reviews: 100,
-				image: "https://via.placeholder.com/150",
-			}).unwrap();
-			toast.dismiss(loadingToastId);
-			toast.success("Hotel created successfully");
-		} catch (error) {
-			toast.dismiss(loadingToastId);
-			toast.error(error.data.message);
-		}
-	};
-
 	return (
-		<div className="container mx-auto px-4 py-8 min-h-screen mt-24">
-			<div className="text-center">
-				<h1 className="text-2xl font-bold mb-4">Create a new Hotel</h1>
-				<p className="text-muted-foreground"></p>
-				<div className="flex justify-center mt-4">
-					<Button onClick={handleClick}>Create Hotel</Button>
+		<div className="container w-full py-6 md:py-12 lg:py-16 mt-24 mx-auto">
+			<div className="mb-6 space-y-3">
+				<h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+					Create a new hotel
+				</h2>
+
+				<p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+					Fill out the form below to create a new hotel.
+				</p>
+				<div className="flex *:mt-4 w-96">
+					<CreateHotelForm />
 				</div>
 			</div>
 		</div>
