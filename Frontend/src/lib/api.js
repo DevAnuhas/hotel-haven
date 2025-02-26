@@ -12,7 +12,18 @@ export const api = createApi({
 		getHotelById: builder.query({
 			query: (id) => `hotel/${id}`,
 		}),
+		createHotel: builder.mutation({
+			query: (hotel) => ({
+				url: `hotel`,
+				method: "POST",
+				body: hotel,
+			}),
+		}),
 	}),
 });
 
-export const { useGetHotelsQuery, useGetHotelByIdQuery } = api;
+export const {
+	useGetHotelsQuery,
+	useGetHotelByIdQuery,
+	useCreateHotelMutation,
+} = api;
