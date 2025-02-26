@@ -170,8 +170,6 @@ export const createHotel = async (
 		if (
 			!hotel.name ||
 			!hotel.location ||
-			!hotel.rating ||
-			!hotel.reviews ||
 			!hotel.image ||
 			!hotel.price ||
 			!hotel.description
