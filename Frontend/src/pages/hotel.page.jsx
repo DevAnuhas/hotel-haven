@@ -1,28 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { useParams } from "react-router";
-import { getHotelById } from "@/lib/api/hotels";
-import { useState, useEffect } from "react";
 import { MapPin, Star, Wifi, Utensils, Tv, Coffee } from "lucide-react";
+import { useParams } from "react-router";
+import { useGetHotelByIdQuery } from "@/lib/api";
 
 function HotelsPage() {
-	const [hotel, setHotel] = useState(null);
-	const [error, setError] = useState(null);
 	const { id } = useParams();
-
-	useEffect(() => {
-		const fetchHotel = async () => {
-			try {
-				const data = await getHotelById(id);
-				if (!data) {
-					throw new Error();
-				}
-				setHotel(data);
-			} catch (err) {
-				setError(err.message);
-			}
-		};
-		fetchHotel();
-	}, [id]);
+	const { data: hotel, error } = useGetHotelByIdQuery(id);
 
 	if (error || !hotel) {
 		return (

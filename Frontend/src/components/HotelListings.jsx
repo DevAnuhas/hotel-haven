@@ -1,39 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import HotelCard from "./HotelCard";
 import LocationTab from "./LocationTab";
-import { getHotels } from "@/lib/api/hotels";
 import SkeletonHotelCard from "./SkeletonHotelCard";
+import { useGetHotelsQuery } from "@/lib/api";
+
 export default function HotelListings() {
-	const [hotels, setHotels] = useState([]);
-	const [error, setError] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
-
-	/* 	useEffect(() => {
-		const fetchHotels = async () => {
-			try {
-				const hotels = await getHotels();
-				setHotels(hotels);
-			} catch (error) {
-				setError(error.message);
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		fetchHotels();
-	}, []); */
-
-	useEffect(() => {
-		getHotels()
-			.then((hotels) => {
-				setHotels(hotels);
-			})
-			.catch((error) => {
-				setError(error.message);
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
-	}, []);
+	const { data: hotels, isLoading, error } = useGetHotelsQuery();
 
 	const locations = ["All", "France", "Australia", "Japan", "Italy"];
 
@@ -61,7 +33,7 @@ export default function HotelListings() {
 		);
 	});
 
-	const hotelCards = filteredHotels.map((hotel) => {
+	const hotelCards = filteredHotels?.map((hotel) => {
 		return <HotelCard key={hotel._id} hotel={hotel} />;
 	});
 
