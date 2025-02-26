@@ -23,10 +23,14 @@ function HotelCard({ hotel }) {
 					<span>{hotel.location}</span>
 				</div>
 				<div className="flex items-center space-x-1">
-					<Star className="h-4 w-4 fill-primary text-primary" />
-					<span className="font-medium">{hotel.rating}</span>
+					{hotel.rating ? (
+						<>
+							<Star className="h-4 w-4 fill-primary text-primary" />
+							<span className="text-muted-foreground">{hotel.rating}</span>
+						</>
+					) : null}
 					<span className="text-muted-foreground">
-						({hotel.reviews.toLocaleString()} Reviews)
+						({hotel.reviews?.toLocaleString() || "0"} reviews)
 					</span>
 				</div>
 				<div className="flex items-baseline space-x-2">

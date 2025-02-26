@@ -19,7 +19,7 @@ export default function Hero() {
 
 				<form
 					onSubmit={handleSearch}
-					className="w-full max-w-3xl bg-black/10  backdrop-blur-md lg:h-16 rounded-full flex items-center"
+					className="w-full max-w-3xl md:h-16 h-14 rounded-full flex items-center"
 				>
 					<Input />
 				</form>

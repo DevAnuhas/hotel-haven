@@ -107,10 +107,14 @@ function HotelsPage() {
 							</button>
 						</div>
 						<div className="flex items-center space-x-1">
-							<Star fill="currentColor" size={20} />
-							<span className="font-bold">{hotel.rating}</span>
+							{hotel.rating ? (
+								<>
+									<Star fill="currentColor" size={20} />
+									<span className="font-bold">{hotel.rating}</span>
+								</>
+							) : null}
 							<span className="text-muted-foreground">
-								({hotel.reviews.toLocaleString()} reviews)
+								({hotel.reviews?.toLocaleString() || "0"} reviews)
 							</span>
 						</div>
 						<p className="text-muted-foreground">{hotel.description}</p>

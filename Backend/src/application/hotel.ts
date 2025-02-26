@@ -181,8 +181,6 @@ export const createHotel = async (
 		await Hotel.create({
 			name: hotel.name,
 			location: hotel.location,
-			rating: parseFloat(hotel.rating),
-			reviews: parseInt(hotel.reviews),
 			image: hotel.image,
 			price: parseInt(hotel.price),
 			description: hotel.description,
