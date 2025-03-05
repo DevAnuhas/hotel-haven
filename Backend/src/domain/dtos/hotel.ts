@@ -9,3 +9,13 @@ export const CreateHotelDTO = z.object({
 	price: z.number(),
 	description: z.string(),
 });
+
+export const UpdateHotelDTO = z.object({
+	name: z.string(),
+	location: z.string(),
+	image: z.string(),
+	price: z.number(),
+	description: z.string(),
+	rating: z.number(),
+	reviews: z.number(),
+});
