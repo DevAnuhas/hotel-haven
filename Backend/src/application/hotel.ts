@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
-import { CreateHotelDTO } from "../domain/dtos/hotel";
+import { CreateHotelDTO, UpdateHotelDTO } from "../domain/dtos/hotel";
 
 /* const hotels = [
 	{
@@ -170,9 +170,7 @@ export const createHotel = async (
 		const hotel = CreateHotelDTO.safeParse(req.body);
 
 		if (!hotel.success) {
-			throw new ValidationError(
-				"Please enter all required fields" + hotel.error.message
-			);
+			throw new ValidationError("Please enter all required fields");
 		}
 
 		// Add the hotel
@@ -187,6 +185,39 @@ export const createHotel = async (
 		// Return the response
 		res.status(201).json({
 			message: "Hotel added successfully!",
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+// Update a hotel
+export const updateHotel = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const hotelId = req.params.id;
+		const hotel = await Hotel.findById(hotelId);
+
+		// Validate the request
+		if (!hotel) {
+			throw new NotFoundError("Hotel not found");
+		}
+
+		// Validate the request data
+		const updatedHotel = UpdateHotelDTO.safeParse(req.body);
+		if (!updatedHotel.success) {
+			throw new ValidationError("Please enter all required fields");
+		}
+
+		// Update the hotel
+		await Hotel.findByIdAndUpdate(hotelId, updatedHotel.data);
+
+		// Return the response
+		res.status(200).json({
+			message: `Hotel ${hotelId} updated successfully!`,
 		});
 	} catch (error) {
 		next(error);
@@ -214,47 +245,6 @@ export const deleteHotel = async (
 		// Return the response
 		res.status(200).json({
 			message: `Hotel ${hotelId} deleted successfully!`,
-		});
-	} catch (error) {
-		next(error);
-	}
-};
-
-// Update a hotel
-export const updateHotel = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	try {
-		const hotelId = req.params.id;
-		const updatedHotel = req.body;
-		const hotel = await Hotel.findById(hotelId);
-
-		// Validate the request
-		if (!hotel) {
-			throw new NotFoundError("Hotel not found");
-		}
-
-		// Validate the request data
-		if (
-			!updatedHotel.name ||
-			!updatedHotel.location ||
-			!updatedHotel.rating ||
-			!updatedHotel.reviews ||
-			!updatedHotel.image ||
-			!updatedHotel.price ||
-			!updatedHotel.description
-		) {
-			throw new ValidationError("Please enter all required fields");
-		}
-
-		// Update the hotel
-		await Hotel.findByIdAndUpdate(hotelId, updatedHotel);
-
-		// Return the response
-		res.status(200).json({
-			message: `Hotel ${hotelId} updated successfully!`,
 		});
 	} catch (error) {
 		next(error);
