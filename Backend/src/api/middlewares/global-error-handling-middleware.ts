@@ -2,6 +2,7 @@ import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import ValidationError from "../../domain/errors/validation-error";
 import NotFoundError from "../../domain/errors/not-found-error";
 import UnauthorizedError from "../../domain/errors/unauthorized-error";
+import ForbiddenError from "../../domain/errors/forbidden-error";
 
 const globalErrorHandlingMiddleware: ErrorRequestHandler = (
 	err: Error,
@@ -16,6 +17,11 @@ const globalErrorHandlingMiddleware: ErrorRequestHandler = (
 
 	if (err instanceof UnauthorizedError) {
 		res.status(401).json({ message: err.message });
+		return;
+	}
+
+	if (err instanceof ForbiddenError) {
+		res.status(403).json({ message: err.message });
 		return;
 	}
 

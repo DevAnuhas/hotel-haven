@@ -7,13 +7,14 @@ import {
 	updateHotel,
 } from "../application/hotel";
 import { isAuthenticated } from "./middlewares/authentication-middleware";
+import { isAdmin } from "./middlewares/authorization-middleware";
 
 const hotelRouter = express.Router();
 
 hotelRouter.get("/", getHotels);
 hotelRouter.get("/:id", getHotelById);
-hotelRouter.post("/", isAuthenticated, createHotel);
-hotelRouter.delete("/:id", isAuthenticated, deleteHotel);
-hotelRouter.put("/:id", isAuthenticated, updateHotel);
+hotelRouter.post("/", isAuthenticated, isAdmin, createHotel);
+hotelRouter.delete("/:id", isAuthenticated, isAdmin, deleteHotel);
+hotelRouter.put("/:id", isAuthenticated, isAdmin, updateHotel);
 
 export default hotelRouter;
