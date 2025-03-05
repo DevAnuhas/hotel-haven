@@ -4,7 +4,16 @@ const BASE_URL = "http://localhost:3000";
 
 export const api = createApi({
 	reducerPath: "api",
-	baseQuery: fetchBaseQuery({ baseUrl: `${BASE_URL}/api/` }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${BASE_URL}/api/`,
+		prepareHeaders: async (headers) => {
+			const token = await window?.Clerk?.session?.getToken();
+			if (token) {
+				headers.set("Authorization", `Bearer ${token}`);
+			}
+			return headers;
+		},
+	}),
 	endpoints: (builder) => ({
 		getHotels: builder.query({
 			query: () => `hotel`,
