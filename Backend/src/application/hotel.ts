@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { NextFunction, Request, Response } from "express";
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
+import { CreateHotelDTO } from "../domain/dtos/hotel";
 
 /* const hotels = [
 	{
@@ -165,25 +166,22 @@ export const createHotel = async (
 	next: NextFunction
 ) => {
 	try {
-		const hotel = req.body;
+		// Validate the request data
+		const hotel = CreateHotelDTO.safeParse(req.body);
 
-		if (
-			!hotel.name ||
-			!hotel.location ||
-			!hotel.image ||
-			!hotel.price ||
-			!hotel.description
-		) {
-			throw new ValidationError("Please enter all required fields");
+		if (!hotel.success) {
+			throw new ValidationError(
+				"Please enter all required fields" + hotel.error.message
+			);
 		}
 
 		// Add the hotel
 		await Hotel.create({
-			name: hotel.name,
-			location: hotel.location,
-			image: hotel.image,
-			price: parseInt(hotel.price),
-			description: hotel.description,
+			name: hotel.data.name,
+			location: hotel.data.location,
+			image: hotel.data.image,
+			price: hotel.data.price,
+			description: hotel.data.description,
 		});
 
 		// Return the response
