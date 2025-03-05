@@ -1,48 +1,47 @@
 import Booking from "../infrastructure/schemas/Booking";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
+import NotFoundError from "../domain/errors/not-found-error";
+import ValidationError from "../domain/errors/validation-error";
+import { CreateBookingDTO } from "../domain/dtos/booking";
 
 // Create a new booking
-export const createBooking = async (req: Request, res: Response) => {
-	const booking = req.body;
+export const createBooking = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		// Validate the request data
+		const booking = CreateBookingDTO.safeParse(req.body);
 
-	// Validate the request data
-	if (
-		!booking.hotelId ||
-		!booking.userId ||
-		!booking.checkInDate ||
-		!booking.checkOutDate ||
-		!booking.roomNumber
-	) {
-		res.status(400).json({
-			message: "Please enter all required fields",
+		if (!booking.success) {
+			throw new ValidationError("Please enter all required fields");
+		}
+
+		// Add the booking
+		await Booking.create({
+			hotelId: booking.data.hotelId,
+			userId: req.auth?.userId,
+			checkInDate: booking.data.checkInDate,
+			checkOutDate: booking.data.checkOutDate,
+			roomNumber: booking.data.roomNumber,
+		});
+
+		// Return the response
+		res.status(201).json({
+			message: "Booking created successfully!",
 		});
 		return;
+	} catch (error) {
+		next(error);
 	}
-
-	// Add the booking
-	await Booking.create({
-		hotelId: booking.hotelId,
-		userId: booking.userId,
-		checkInDate: booking.checkInDate,
-		checkOutDate: booking.checkOutDate,
-		roomNumber: booking.roomNumber,
-	});
-
-	// Return the response
-	res.status(201).json({
-		message: "Booking added successfully!",
-	});
-	return;
 };
 
 export const getAllBookings = async (req: Request, res: Response) => {
 	const bookings = await Booking.find();
 
 	if (!bookings) {
-		res.status(404).json({
-			message: "Booking not found",
-		});
-		return;
+		throw new NotFoundError("No bookings found");
 	}
 
 	res.status(200).json(bookings);
@@ -52,9 +51,10 @@ export const getAllBookings = async (req: Request, res: Response) => {
 export const getAllBookingsForHotel = async (req: Request, res: Response) => {
 	try {
 		const hotelId = req.params.hotelId;
-		const bookings = await Booking.find({ hotelId: hotelId })
-			.populate("userId", "name email")
-			.populate("hotelId", "name location price");
+		const bookings = await Booking.find({ hotelId: hotelId }).populate(
+			"hotelId",
+			"name location price"
+		);
 		res.status(200).json(bookings);
 		return;
 	} catch (error) {

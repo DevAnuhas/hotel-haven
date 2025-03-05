@@ -1,6 +1,6 @@
 import Hotel from "../infrastructure/schemas/Hotel";
 import mongoose from "mongoose";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import { CreateHotelDTO, UpdateHotelDTO } from "../domain/dtos/hotel";

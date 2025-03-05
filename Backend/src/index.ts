@@ -5,7 +5,6 @@ import cors from "cors";
 import connectDB from "./infrastructure/db";
 
 import hotelRouter from "./api/hotel";
-import userRouter from "./api/user";
 import bookingRouter from "./api/booking";
 
 import globalErrorHandlingMiddleware from "./api/middlewares/global-error-handling-middleware";
@@ -30,7 +29,6 @@ connectDB();
 
 // Define the routes
 app.use("/api/hotel", hotelRouter);
-app.use("/api/user", userRouter);
 app.use("/api/booking", bookingRouter);
 
 // Middleware to handle errors

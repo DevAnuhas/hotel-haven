@@ -1,13 +1,42 @@
 import { MapPin, Star, Wifi, Utensils, Tv, Coffee } from "lucide-react";
-import { useParams } from "react-router";
-import { useGetHotelByIdQuery } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
+
+import { useNavigate, useParams } from "react-router";
+import { useUser } from "@clerk/clerk-react";
+import { useGetHotelByIdQuery, useCreateBookingMutation } from "@/lib/api";
 
 function HotelsPage() {
 	const { id } = useParams();
+	const navigate = useNavigate();
+	const { isSignedIn, isLoaded } = useUser();
 	const { data: hotel, isLoading, isError, error } = useGetHotelByIdQuery(id);
+	const [createBooking] = useCreateBookingMutation();
+
+	const handleBookNow = async () => {
+		if (!isLoaded) {
+			return;
+		}
+		if (!isSignedIn) {
+			return navigate("/sign-in");
+		}
+		const loadingToastId = toast.loading("Creating booking...");
+		try {
+			await createBooking({
+				hotelId: id,
+				checkInDate: new Date().toISOString(),
+				checkOutDate: new Date().toISOString(),
+				roomNumber: 201,
+			}).unwrap();
+			toast.dismiss(loadingToastId);
+			toast.success("Booking created successfully");
+		} catch (error) {
+			toast.dismiss(loadingToastId);
+			toast.error(error.data.message);
+		}
+	};
 
 	if (isLoading)
 		return (
@@ -146,7 +175,10 @@ function HotelsPage() {
 								<p className="text-2xl font-bold">${hotel.price}</p>
 								<p className="text-sm text-muted-foreground">per night</p>
 							</div>
-							<Button className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8">
+							<Button
+								onClick={handleBookNow}
+								className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8"
+							>
 								Book Now
 							</Button>
 						</div>
