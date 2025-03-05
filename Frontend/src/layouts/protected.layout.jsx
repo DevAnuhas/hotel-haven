@@ -1,10 +1,10 @@
-import { useAuth } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import { Navigate, Outlet } from "react-router";
 
 const ProtectedLayout = () => {
-	const { isSignedIn } = useAuth();
+	const { isSignedIn, isLoaded } = useUser();
 
-	if (!isSignedIn) {
+	if (!isSignedIn && isLoaded) {
 		return <Navigate to="/sign-in" />;
 	}
 
