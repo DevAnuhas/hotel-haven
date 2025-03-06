@@ -13,18 +13,19 @@ import { ArrowRight } from "lucide-react";
 
 export function CarouselPlugin() {
 	const slides = [
-        {
-            image: "./src/assets/carousel-1.jpg",
-            title: "Beachfront Bliss",
-            desciption: "Unwind at stunning beach resorts worldwide.",
-        },
-        {
-            image: "./src/assets/carousel-2.jpg",
-            title: "Urban Luxury",
-            desciption: "Stay in the heart of vibrant cities with top-tier amenities.",
-        },
 		{
-			image: "./src/assets/carousel-3.jpg",
+			image: "./assets/carousel-1.jpg",
+			title: "Beachfront Bliss",
+			desciption: "Unwind at stunning beach resorts worldwide.",
+		},
+		{
+			image: "./assets/carousel-2.jpg",
+			title: "Urban Luxury",
+			desciption:
+				"Stay in the heart of vibrant cities with top-tier amenities.",
+		},
+		{
+			image: "./assets/carousel-3.jpg",
 			title: "Escape to Nature",
 			desciption: "Discover peaceful retreats surrounded by natural beauty",
 		},
@@ -63,7 +64,7 @@ export function CarouselPlugin() {
 											onClick={() => window.open("/", "_self")}
 										>
 											<span className="lg:text-lg">Book Now</span>
-                                            <ArrowRight />
+											<ArrowRight />
 										</Button>
 									</CardContent>
 									<img
