@@ -22,7 +22,7 @@ app.use(express.json());
 const corsOptions = {
 	origin: process.env.CORS_ORIGIN,
 };
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Connect to the database
 connectDB();
