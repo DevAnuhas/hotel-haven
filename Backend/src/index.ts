@@ -28,15 +28,17 @@ app.use(cors(corsOptions));
 connectDB();
 
 // Define the routes
-// app.use("/", (req, res) => {
-// 	res.send("API is running...");
-// });
+app.get("/", (req, res) => {
+	res.send("API is running...");
+});
+
+// Define the API routes
 app.use("/api/hotel", hotelRouter);
 app.use("/api/booking", bookingRouter);
 
 // Middleware to handle errors
 app.use(globalErrorHandlingMiddleware);
 
-// Define the port to run the server
-const PORT = 3000;
+// Define the port (Vercel will override this with its own PORT env variable)
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));
