@@ -18,16 +18,19 @@ app.use(clerkMiddleware());
 // Middleware to parse JSON data in the request body
 app.use(express.json());
 
-// Middleware to enable CORS
+// Middleware to enable
 const corsOptions = {
 	origin: process.env.CORS_ORIGIN,
 };
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Connect to the database
 connectDB();
 
 // Define the routes
+// app.use("/", (req, res) => {
+// 	res.send("API is running...");
+// });
 app.use("/api/hotel", hotelRouter);
 app.use("/api/booking", bookingRouter);
 

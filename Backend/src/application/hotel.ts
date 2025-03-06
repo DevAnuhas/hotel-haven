@@ -113,9 +113,9 @@ import { CreateHotelDTO, UpdateHotelDTO } from "../domain/dtos/hotel";
 ]; */
 
 // Sleep function for rate limiting or testing
-const sleep = (ms: number) => {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-};
+// const sleep = (ms: number) => {
+// 	return new Promise((resolve) => setTimeout(resolve, ms));
+// };
 
 // Get all hotels
 export const getHotels = async (
@@ -124,7 +124,6 @@ export const getHotels = async (
 	next: NextFunction
 ) => {
 	try {
-		await sleep(1500);
 		const hotels = await Hotel.find();
 		if (!hotels) {
 			throw new NotFoundError("No hotels found");
