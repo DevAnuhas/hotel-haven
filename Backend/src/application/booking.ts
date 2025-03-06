@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import { CreateBookingDTO } from "../domain/dtos/booking";
+import { clerkClient } from "@clerk/express";
 
 // Create a new booking
 export const createBooking = async (
@@ -48,16 +49,38 @@ export const getAllBookings = async (req: Request, res: Response) => {
 	return;
 };
 
-export const getAllBookingsForHotel = async (req: Request, res: Response) => {
+export const getAllBookingsForHotel = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	try {
 		const hotelId = req.params.hotelId;
 		const bookings = await Booking.find({ hotelId: hotelId }).populate(
 			"hotelId",
 			"name location price"
 		);
-		res.status(200).json(bookings);
+		const bookingsWithUser = await Promise.all(
+			bookings.map(async (el) => {
+				const user = await clerkClient.users.getUser(el.userId);
+				return {
+					_id: el._id,
+					user: {
+						_id: user.id,
+						firstName: user.firstName,
+						lastName: user.lastName,
+					},
+					hotel: el.hotelId,
+					checkInDate: el.checkInDate,
+					checkOutDate: el.checkOutDate,
+					roomNumber: el.roomNumber,
+				};
+			})
+		);
+
+		res.status(200).json(bookingsWithUser);
 		return;
 	} catch (error) {
-		res.status(500).json({ error: (error as Error).message });
+		next(error);
 	}
 };
