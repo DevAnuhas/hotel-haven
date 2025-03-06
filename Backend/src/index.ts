@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Middleware to enable CORS
 const corsOptions = {
-	origin: "http://localhost:5173",
+	origin: process.env.CORS_ORIGIN,
 };
 app.use(cors(corsOptions));
 
