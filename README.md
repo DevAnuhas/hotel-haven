@@ -77,7 +77,8 @@ Create a `.env` file in the `Backend` directory and add the following environmen
 MONGODB_URI=your_mongodb_uri
 CORS_ORIGIN=your_frontend_url
 CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_API_KEY=your_clerk_api_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+OPENAI_API_KEY=your_openai_api_key
 ```
 
 Create a `.env` file in the `Frontend` directory and add the following environment variables:
