@@ -35,6 +35,10 @@ export const api = createApi({
 				body: booking,
 			}),
 		}),
+		searchHotels: builder.query({
+			query: (query) =>
+				`hotel/search/retrieve?query=${encodeURIComponent(query)}`,
+		}),
 	}),
 });
 
@@ -43,4 +47,5 @@ export const {
 	useGetHotelByIdQuery,
 	useCreateHotelMutation,
 	useCreateBookingMutation,
+	useSearchHotelsQuery,
 } = api;

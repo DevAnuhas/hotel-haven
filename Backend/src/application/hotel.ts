@@ -1,6 +1,5 @@
 import Hotel from "../infrastructure/schemas/Hotel";
 import mongoose from "mongoose";
-import OpenAI from "openai";
 import { Request, Response, NextFunction } from "express";
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
@@ -21,28 +20,6 @@ export const getHotels = async (
 	} catch (error) {
 		next(error);
 	}
-};
-
-export const generateResponse = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	const { prompt } = req.body;
-	const openai = new OpenAI({
-		apiKey: process.env.OPENAI_API_KEY,
-	});
-
-	async function main() {
-		const completion = await openai.chat.completions.create({
-			messages: [{ role: "system", content: "You are a helpful assistant." }],
-			model: "gpt-4o-mini",
-		});
-
-		res.send(completion.choices[0].message.content);
-	}
-
-	main();
 };
 
 // Get a specific hotel (dynamic route)

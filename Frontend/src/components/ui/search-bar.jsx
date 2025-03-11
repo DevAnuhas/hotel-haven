@@ -16,7 +16,7 @@ const Input = () => {
 					<input
 						placeholder="Describe your destination, experience, or hotel..."
 						type="text"
-						name="text"
+						name="search"
 						className="input rounded-full w-[calc(100%-2px)] h-[calc(100%-2px)] px-8 py-2 text-white placeholder:text-white/50 border-none outline-none shadow-none bg-[#010201]"
 					/>
 					<div id="input-mask" />
