@@ -4,16 +4,29 @@ import { useSearchHotelsQuery } from "@/lib/api";
 import { setSearchQuery, setSearchResults } from "@/lib/features/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
 
+// eslint-disable-next-line react/prop-types
 export default function Hero() {
 	const dispatch = useDispatch();
 	const searchQuery = useSelector((state) => state.search.searchQuery);
 
 	const handleSearch = (e) => {
 		e.preventDefault();
+		window.location.href = "#";
 		const query = e.target.elements.search.value.trim();
-		// Only dispatch if the query is new or different
+
 		if (query && query !== searchQuery) {
+			// Only dispatch if the query is new or different
 			dispatch(setSearchQuery(query));
+
+			const hotelListings = document.getElementById("hotel-listings");
+			if (hotelListings) {
+				const elementPosition =
+					hotelListings.getBoundingClientRect().top + window.scrollY;
+				window.scrollTo({
+					top: elementPosition - 72,
+					behavior: "smooth",
+				});
+			}
 		}
 	};
 
@@ -48,7 +61,7 @@ export default function Hero() {
 					onSubmit={handleSearch}
 					className="w-full max-w-3xl md:h-16 h-14 rounded-full flex items-center"
 				>
-					<Input name="search" placeholder="Search for hotels..." />
+					<Input />
 				</form>
 			</div>
 			<div className="absolute top-0 left-0 w-full h-full object-cover -z-10">
