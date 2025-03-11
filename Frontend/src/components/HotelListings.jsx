@@ -44,7 +44,10 @@ export default function HotelListings() {
 	));
 
 	return (
-		<section className="container w-full py-6 md:py-12 lg:py-16 mx-auto">
+		<section
+			id="hotel-listings"
+			className="container w-full py-6 md:py-12 lg:py-16 mx-auto"
+		>
 			<div className="mb-6 space-y-3">
 				<h3 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
 					{isFetchingSearch || isHotelsLoading
