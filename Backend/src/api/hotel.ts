@@ -5,6 +5,7 @@ import {
 	createHotel,
 	deleteHotel,
 	updateHotel,
+	generateResponse,
 } from "../application/hotel";
 import { isAuthenticated } from "./middlewares/authentication-middleware";
 import { isAdmin } from "./middlewares/authorization-middleware";
@@ -16,5 +17,6 @@ hotelRouter.get("/:id", getHotelById);
 hotelRouter.post("/", isAuthenticated, isAdmin, createHotel);
 hotelRouter.delete("/:id", isAuthenticated, isAdmin, deleteHotel);
 hotelRouter.put("/:id", isAuthenticated, isAdmin, updateHotel);
+hotelRouter.post("/llm", generateResponse);
 
 export default hotelRouter;
