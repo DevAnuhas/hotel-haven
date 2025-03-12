@@ -4,7 +4,6 @@ import { useSearchHotelsQuery } from "@/lib/api";
 import { setSearchQuery, setSearchResults } from "@/lib/features/searchSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-// eslint-disable-next-line react/prop-types
 export default function Hero() {
 	const dispatch = useDispatch();
 	const searchQuery = useSelector((state) => state.search.searchQuery);
