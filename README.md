@@ -5,11 +5,11 @@ Hotel Haven is a modern hotel booking application built with React, featuring a 
 ## Features
 
 - Browse available hotels with detailed information
+- Semantic hotel search with OpenAI embeddings
 - Responsive design for all devices
 - Detailed hotel pages with image galleries
 - Location-based hotel search
 - Price filtering and sorting options
-- AI-powered search feature
 - User authentication and authorization
 - Admin panel for managing hotels
 - Booking functionality
@@ -38,6 +38,8 @@ Hotel Haven is a modern hotel booking application built with React, featuring a 
 - **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine.
 - **Express**: A minimal and flexible Node.js web application framework.
 - **Mongoose**: An ODM (Object Data Modeling) library for MongoDB and Node.js.
+- **LangChain**: A framework for developing applications powered by language models.
+- **OpenAI**: Utilized for AI-powered search and recommendation features.
 - **Clerk**: Authentication and user management for Node.js applications.
 - **Zod**: TypeScript-first schema declaration and validation library.
 - **Dotenv**: A module that loads environment variables from a `.env` file into `process.env`.
