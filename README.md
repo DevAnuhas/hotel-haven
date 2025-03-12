@@ -15,7 +15,8 @@ Hotel Haven is a modern hotel booking application built with React, featuring a 
 - Booking functionality
 
 **Deployed URL**
-[https://hotel-haven-frontend.vercel.app](https://hotel-haven-frontend.vercel.app/)
+Frontend: [https://hotel-haven-frontend.vercel.app](https://hotel-haven-frontend.vercel.app)
+Backend: [https://hotel-haven-api.vercel.app](https://hotel-haven-api.vercel.app)
 
 ## Tech Stack
 
