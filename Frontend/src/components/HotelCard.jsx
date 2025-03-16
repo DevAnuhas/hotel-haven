@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { MapPin, Star } from "lucide-react";
 import { Link } from "react-router";
 function HotelCard({ hotel }) {
