@@ -18,9 +18,20 @@ const bookingSchema = new mongoose.Schema({
 		type: Date,
 		required: true,
 	},
-	roomNumber: {
+	roomType: {
+		type: String,
+		required: true,
+	},
+	adults: {
+		type: String,
+		required: true,
+	},
+	children: {
 		type: Number,
 		required: true,
+	},
+	specialRequests: {
+		type: String,
 	},
 });
 

@@ -6,14 +6,8 @@ export const CreateBookingDTO = z.object({
 	lastName: z.string(),
 	email: z.string(),
 	phone: z.string(),
-	checkInDate: z
-		.string()
-		.datetime()
-		.transform((val) => new Date(val)),
-	checkOutDate: z
-		.string()
-		.datetime()
-		.transform((val) => new Date(val)),
+	checkInDate: z.date(),
+	checkOutDate: z.date(),
 	roomType: z.string(),
 	adults: z.string(),
 	children: z.string(),

@@ -1,40 +1,33 @@
-import { MapPin, Star, Wifi, Utensils, Tv, Coffee } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { toast } from "sonner";
-
-import { useNavigate, useParams } from "react-router";
+import { useState } from "react";
+import { useParams } from "react-router";
 import { useUser } from "@clerk/clerk-react";
-import { useGetHotelByIdQuery, useCreateBookingMutation } from "@/lib/api";
+import { useGetHotelByIdQuery } from "@/lib/api";
+
+import { MapPin, Star, Wifi, Utensils, Tv, Coffee } from "lucide-react";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { BookingForm } from "@/components/BookingForm";
 
 function HotelsPage() {
 	const { id } = useParams();
-	const navigate = useNavigate();
-	const { isSignedIn, isLoaded } = useUser();
 	const { data: hotel, isLoading, isError, error } = useGetHotelByIdQuery(id);
-	const [createBooking] = useCreateBookingMutation();
+	const { isSignedIn, isLoaded } = useUser();
+	const [bookingOpen, setBookingOpen] = useState(false);
 
-	const handleBookNow = async () => {
-		if (!isLoaded) {
-			return;
-		}
-		if (!isSignedIn) {
-			return navigate("/sign-in");
-		}
-		const loadingToastId = toast.loading("Creating booking...");
-		try {
-			await createBooking({
-				hotelId: id,
-				checkInDate: new Date().toISOString(),
-				checkOutDate: new Date().toISOString(),
-				roomNumber: 201,
-			}).unwrap();
-			toast.dismiss(loadingToastId);
-			toast.success("Booking created successfully");
-		} catch (error) {
-			toast.dismiss(loadingToastId);
-			toast.error(error.data.message);
+	const handleBooking = () => {
+		if (isSignedIn && isLoaded) {
+			return <Dialog open={bookingOpen} onOpenChange={setBookingOpen} />;
+		} else {
+			window.location.href = `/sign-in`;
 		}
 	};
 
@@ -108,17 +101,35 @@ function HotelsPage() {
 			<div className="container mx-auto px-4 py-8 min-h-screen mt-24">
 				<div className="grid md:grid-cols-2 gap-8">
 					<div className="space-y-4">
-						<div className="relative w-full aspect-[4/3] overflow-hidden rounded-lg">
+						<div className="relative aspect-[4/3] overflow-hidden rounded-lg">
 							<img
 								src={hotel.image}
 								alt={hotel.name}
 								className="absolute object-cover rounded-lg"
 							/>
 						</div>
-						<div className="flex space-x-2">
-							<Badge variant="secondary">Rooftop View</Badge>
-							<Badge variant="secondary">French Cuisine</Badge>
-							<Badge variant="secondary">City Center</Badge>
+						<div className="rounded-lg border bg-card text-card-foreground shadow">
+							<div className="p-4">
+								<h2 className="text-xl font-semibold mb-4">Amenities</h2>
+								<div className="grid grid-cols-2 gap-4">
+									<div className="flex items-center">
+										<Wifi className="mr-2" size={20} />
+										<span>Free Wi-Fi</span>
+									</div>
+									<div className="flex items-center">
+										<Utensils className="mr-2" size={20} />
+										<span>Restaurant</span>
+									</div>
+									<div className="flex items-center">
+										<Tv className="mr-2" size={20} />
+										<span>Flat-screen TV</span>
+									</div>
+									<div className="flex items-center">
+										<Coffee className="mr-2" size={20} />
+										<span>Coffee maker</span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div className="space-y-6">
@@ -147,41 +158,51 @@ function HotelsPage() {
 							</span>
 						</div>
 						<p className="text-muted-foreground">{hotel.description}</p>
-						<div className="rounded-xl border bg-card text-card-foreground shadow">
-							<div className="p-4">
-								<h2 className="text-xl font-semibold mb-4">Amenities</h2>
-								<div className="grid grid-cols-2 gap-4">
-									<div className="flex items-center">
-										<Wifi className="mr-2" size={20} />
-										<span>Free Wi-Fi</span>
-									</div>
-									<div className="flex items-center">
-										<Utensils className="mr-2" size={20} />
-										<span>Restaurant</span>
-									</div>
-									<div className="flex items-center">
-										<Tv className="mr-2" size={20} />
-										<span>Flat-screen TV</span>
-									</div>
-									<div className="flex items-center">
-										<Coffee className="mr-2" size={20} />
-										<span>Coffee maker</span>
-									</div>
+
+						<aside className=" mt-8 lg:mt-0">
+							<div className="bg-white p-6 rounded-lg border bg-card text-card-foreground shadow sticky top-24">
+								<h2 className="text-2xl font-semibold text-hotel-dark mb-4">
+									From ${hotel.price} per night
+								</h2>
+								<p className="text-gray-600 mb-6">
+									Experience luxury and comfort in our beautifully designed
+									rooms.
+								</p>
+
+								<Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+									<DialogTrigger asChild>
+										<Button
+											onClick={handleBooking}
+											className="w-full py-6 items-center justify-center gap-2 whitespace-nowrap text-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8"
+										>
+											Book Now
+										</Button>
+									</DialogTrigger>
+									<DialogContent className="sm:max-w-[600px] max-h-[100vh] overflow-y-auto">
+										<DialogHeader>
+											<DialogTitle className="text-center text-2xl font-bold text-hotel-dark">
+												Book Your Stay
+											</DialogTitle>
+											<DialogDescription className="text-center text-gray-600">
+												Complete the form below to request a reservation
+											</DialogDescription>
+										</DialogHeader>
+										<BookingForm
+											hotelId={id}
+											onSuccess={() => setBookingOpen(false)}
+										/>
+									</DialogContent>
+								</Dialog>
+
+								<div className="mt-6 text-sm text-gray-500">
+									<ul className="list-disc list-inside">
+										<li>Free cancellation up to 48 hours before check-in</li>
+										<li>Best rate guarantee when booking direct</li>
+										<li>Complimentary breakfast for bookings made today</li>
+									</ul>
 								</div>
 							</div>
-						</div>
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-2xl font-bold">${hotel.price}</p>
-								<p className="text-sm text-muted-foreground">per night</p>
-							</div>
-							<Button
-								onClick={handleBookNow}
-								className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8"
-							>
-								Book Now
-							</Button>
-						</div>
+						</aside>
 					</div>
 				</div>
 			</div>

@@ -12,12 +12,19 @@ export const createBooking = async (
 	next: NextFunction
 ) => {
 	try {
-		// Validate the request data
 		const booking = CreateBookingDTO.safeParse(req.body);
 
 		if (!booking.success) {
 			throw new ValidationError("Please enter all required fields");
 		}
+
+		// TODO: Add user data to clerk if not exists
+		/* 	const { userData } = {
+			firstName: booking.data.firstName,
+			lastName: booking.data.lastName,
+			email: booking.data.email,
+			phone: booking.data.phone,
+		}; */
 
 		// Add the booking
 		await Booking.create({
@@ -25,7 +32,10 @@ export const createBooking = async (
 			userId: req.auth?.userId,
 			checkInDate: booking.data.checkInDate,
 			checkOutDate: booking.data.checkOutDate,
-			roomNumber: booking.data.roomNumber,
+			roomType: booking.data.roomType,
+			adults: booking.data.adults,
+			children: booking.data.children,
+			specialRequests: booking.data.specialRequests,
 		});
 
 		// Return the response
@@ -69,11 +79,16 @@ export const getAllBookingsForHotel = async (
 						_id: user.id,
 						firstName: user.firstName,
 						lastName: user.lastName,
+						email: user.primaryEmailAddress?.emailAddress,
+						phone: user.primaryPhoneNumber?.phoneNumber,
 					},
 					hotel: el.hotelId,
 					checkInDate: el.checkInDate,
 					checkOutDate: el.checkOutDate,
-					roomNumber: el.roomNumber,
+					roomType: el.roomType,
+					adults: el.adults,
+					children: el.children,
+					specialRequests: el.specialRequests,
 				};
 			})
 		);
