@@ -1,9 +1,9 @@
-class unauthorizedError extends Error {
+class UnauthorizedError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = "UnauthorizedError";
-		Object.setPrototypeOf(this, unauthorizedError.prototype);
+		Object.setPrototypeOf(this, UnauthorizedError.prototype);
 	}
 }
 
-export default unauthorizedError;
+export default UnauthorizedError;

@@ -25,7 +25,6 @@ export default function HotelListings() {
 
 	// Use search results if available, otherwise use all hotels
 	const hotelsToDisplay = searchResults || hotels;
-	console.log(hotelsToDisplay);
 
 	const filteredHotels =
 		selectedLocation === "All"

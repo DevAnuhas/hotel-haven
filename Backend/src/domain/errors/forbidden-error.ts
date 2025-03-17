@@ -1,9 +1,9 @@
-class forbiddenError extends Error {
+class ForbiddenError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = "ForbiddenError";
-		Object.setPrototypeOf(this, forbiddenError.prototype);
+		Object.setPrototypeOf(this, ForbiddenError.prototype);
 	}
 }
 
-export default forbiddenError;
+export default ForbiddenError;
