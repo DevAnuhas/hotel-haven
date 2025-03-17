@@ -136,9 +136,13 @@ export function BookingForm({ hotelId, onSuccess }) {
 			if (onSuccess) {
 				onSuccess();
 			}
-		} catch (error) {
+		} catch {
 			toast.dismiss(loadingToastId);
-			toast.error(error.data.message);
+			toast.error("Unable to complete booking", {
+				description:
+					"There was an error processing your booking. Please try again or contact us directly.",
+				duration: 5000,
+			});
 		}
 	};
 
@@ -330,10 +334,11 @@ export function BookingForm({ hotelId, onSuccess }) {
 												<SelectValue placeholder="Select room type" />
 											</SelectTrigger>
 										</FormControl>
+										{/* TODO: Add dynamic options based on hotel */}
 										<SelectContent>
 											<SelectItem value="standard">Standard Room</SelectItem>
 											<SelectItem value="deluxe">Deluxe Room</SelectItem>
-											<SelectItem value="suite">Executive Suite</SelectItem>
+											<SelectItem value="executive">Executive Suite</SelectItem>
 											<SelectItem value="presidential">
 												Presidential Suite
 											</SelectItem>
@@ -365,7 +370,7 @@ export function BookingForm({ hotelId, onSuccess }) {
 											<SelectItem value="2">2</SelectItem>
 											<SelectItem value="3">3</SelectItem>
 											<SelectItem value="4">4</SelectItem>
-											<SelectItem value="5">5+</SelectItem>
+											<SelectItem value="5+">5+</SelectItem>
 										</SelectContent>
 									</Select>
 									<FormMessage />
@@ -393,7 +398,7 @@ export function BookingForm({ hotelId, onSuccess }) {
 											<SelectItem value="1">1</SelectItem>
 											<SelectItem value="2">2</SelectItem>
 											<SelectItem value="3">3</SelectItem>
-											<SelectItem value="4">4+</SelectItem>
+											<SelectItem value="4+">4+</SelectItem>
 										</SelectContent>
 									</Select>
 									<FormMessage />
