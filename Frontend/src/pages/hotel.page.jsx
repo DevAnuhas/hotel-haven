@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router";
-import { useUser } from "@clerk/clerk-react";
+import { useUser, SignInButton } from "@clerk/clerk-react";
 import { useGetHotelByIdQuery } from "@/lib/api";
 
 import { MapPin, Star, Wifi, Utensils, Tv, Coffee } from "lucide-react";
@@ -25,10 +25,9 @@ function HotelsPage() {
 
 	const handleBooking = () => {
 		if (isSignedIn && isLoaded) {
-			return <Dialog open={bookingOpen} onOpenChange={setBookingOpen} />;
-		} else {
-			window.location.href = `/sign-in`;
+			setBookingOpen(true);
 		}
+		return;
 	};
 
 	if (isLoading)
@@ -171,12 +170,14 @@ function HotelsPage() {
 
 								<Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
 									<DialogTrigger asChild>
-										<Button
-											onClick={handleBooking}
-											className="w-full py-6 items-center justify-center gap-2 whitespace-nowrap text-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8"
-										>
-											Book Now
-										</Button>
+										<SignInButton mode="modal">
+											<Button
+												onClick={handleBooking}
+												className="w-full py-6 items-center justify-center gap-2 whitespace-nowrap text-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 rounded-md px-8"
+											>
+												Book Now
+											</Button>
+										</SignInButton>
 									</DialogTrigger>
 									<DialogContent className="sm:max-w-[600px] max-h-[100vh] overflow-y-auto">
 										<DialogHeader>

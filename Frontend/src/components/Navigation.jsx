@@ -1,12 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Globe } from "lucide-react";
 import { Link } from "react-router";
-import { SignedIn, UserButton, SignedOut, useUser } from "@clerk/clerk-react";
+import {
+	SignedIn,
+	SignInButton,
+	SignUpButton,
+	UserButton,
+	SignedOut,
+	useUser,
+} from "@clerk/clerk-react";
 
 function Navigation() {
 	const { user } = useUser();
 	return (
-		<nav className="z-50 bg-black flex-no-wrap fixed top-0 flex w-full items-center justify-between px-8 text-white py-4 shadow-md shadow-black/10 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap">
+		<nav className="bg-black flex-no-wrap overflow-y-hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 text-white py-4 shadow-md shadow-black/10 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap">
 			<div className="flex items-center space-x-8">
 				<Link to="/" className="text-2xl font-bold ">
 					Hotel Haven
@@ -22,12 +29,12 @@ function Navigation() {
 					EN
 				</Button>
 				<SignedOut>
-					<Button variant="ghost" asChild>
-						<Link to="/sign-in">Sign In</Link>
-					</Button>
-					<Button asChild>
-						<Link to="/sign-up">Sign Up</Link>
-					</Button>
+					<SignInButton mode="modal" fallbackRedirectUrl={window.location.href}>
+						<Button variant="ghost">Sign In</Button>
+					</SignInButton>
+					<SignUpButton mode="modal" fallbackRedirectUrl={window.location.href}>
+						<Button>Sign Up</Button>
+					</SignUpButton>
 				</SignedOut>
 				<SignedIn>
 					<UserButton />
