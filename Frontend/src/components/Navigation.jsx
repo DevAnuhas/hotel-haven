@@ -29,10 +29,10 @@ function Navigation() {
 					EN
 				</Button>
 				<SignedOut>
-					<SignInButton mode="modal" fallbackRedirectUrl={window.location.href}>
+					<SignInButton mode="modal">
 						<Button variant="ghost">Sign In</Button>
 					</SignInButton>
-					<SignUpButton mode="modal" fallbackRedirectUrl={window.location.href}>
+					<SignUpButton mode="modal">
 						<Button>Sign Up</Button>
 					</SignUpButton>
 				</SignedOut>
