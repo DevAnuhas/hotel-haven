@@ -1,7 +1,6 @@
 import { useState } from "react";
-import HotelCard from "./HotelCard";
-import LocationTab from "./LocationTab";
-import SkeletonHotelCard from "./SkeletonHotelCard";
+import { HotelCard, HotelCardSkeleton } from "./HotelCard";
+import { SortingTab } from "@/components/SortingTab";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetHotelsQuery } from "@/lib/api";
 import { useSelector } from "react-redux";
@@ -16,29 +15,37 @@ export default function HotelListings() {
 		(state) => state.search
 	);
 
-	const locations = ["All", "France", "Australia", "Japan", "Italy"];
-	const [selectedLocation, setSelectedLocation] = useState("All");
-
-	const handleSelectedLocation = (location) => {
-		setSelectedLocation(location);
-	};
-
 	// Use search results if available, otherwise use all hotels
 	const hotelsToDisplay = searchResults || hotels;
 
+	// TODO: Add dynamic sorting options based on hotel locations
+	const sortingList = [
+		{ name: "All", value: "all" },
+		{ name: "France", value: "france" },
+		{ name: "Australia", value: "australia" },
+		{ name: "Japan", value: "japan" },
+		{ name: "Italy", value: "italy" },
+	];
+
+	const [selectedSorting, setSelectedSorting] = useState("all");
+
+	const handleSelectedSorting = (sorting) => {
+		setSelectedSorting(sorting);
+	};
+
 	const filteredHotels =
-		selectedLocation === "All"
+		selectedSorting === "all"
 			? hotelsToDisplay
 			: hotelsToDisplay.filter((hotel) =>
-					hotel.location.toLowerCase().includes(selectedLocation.toLowerCase())
+					hotel.location.toLowerCase().includes(selectedSorting.toLowerCase())
 			  );
 
-	const locationsTab = locations.map((location) => (
-		<LocationTab
-			selectedLocation={selectedLocation}
-			key={locations.indexOf(location)}
-			location={location}
-			onClick={handleSelectedLocation}
+	const sortingTab = sortingList.map((sorting) => (
+		<SortingTab
+			key={sorting.value}
+			selectedSorting={selectedSorting}
+			sorting={sorting}
+			onClick={handleSelectedSorting}
 		/>
 	));
 
@@ -63,11 +70,11 @@ export default function HotelListings() {
 					)}
 				</div>
 			</div>
-			<div className="flex items-center gap-x-4">{locationsTab}</div>
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
+			<div className="flex gap-4 py-4">{sortingTab}</div>
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
 				{isFetchingSearch || isHotelsLoading ? (
 					Array.from({ length: 8 }, (_, index) => (
-						<SkeletonHotelCard key={index} />
+						<HotelCardSkeleton key={index} />
 					))
 				) : (
 					<>

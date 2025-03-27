@@ -3,7 +3,8 @@ import { useUser } from "@clerk/clerk-react";
 import { useGetBookingsForUserQuery } from "@/lib/api";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
-import { BookingCard } from "@/components/BookingCard";
+import { BookingCard, BookingCardSkeleton } from "@/components/BookingCard";
+import { SortingTab } from "@/components/SortingTab";
 
 const AccountPage = () => {
 	const { user, isLoaded } = useUser();
@@ -21,6 +22,38 @@ const AccountPage = () => {
 		isError,
 		error,
 	} = useGetBookingsForUserQuery(userId, { skip: !userId });
+
+	const sortingList = [
+		{ name: "All", value: "all" },
+		{ name: "Pending", value: "pending" },
+		{ name: "Confirmed", value: "confirmed" },
+		{ name: "Completed", value: "completed" },
+		{ name: "Cancelled", value: "cancelled" },
+		{ name: "Archived", value: "archived" },
+	];
+
+	const [selectedSorting, setSelectedSorting] = useState("all");
+
+	const handleSelectedSorting = (sorting) => {
+		setSelectedSorting(sorting);
+	};
+
+	const filteredBookings =
+		selectedSorting === "all"
+			? bookings
+			: bookings.filter(
+					(booking) =>
+						booking.status.toLowerCase() === selectedSorting.toLowerCase()
+			  );
+
+	const sortingTab = sortingList.map((sorting) => (
+		<SortingTab
+			key={sorting.value}
+			selectedSorting={selectedSorting}
+			sorting={sorting}
+			onClick={handleSelectedSorting}
+		/>
+	));
 
 	if (isError)
 		return (
@@ -42,9 +75,10 @@ const AccountPage = () => {
 				<h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
 					My Bookings
 				</h1>
-				<div className="flex *:mt-12 ">
+				<div className="flex gap-4 pt-6">{sortingTab}</div>
+				<div className="flex *:mt-8 ">
 					{!bookings || isLoading ? (
-						<p>Loading...</p>
+						<BookingCardSkeleton />
 					) : bookings.length === 0 ? (
 						<div className="bg-white p-8 rounded-lg shadow-md text-center">
 							<p className="text-xl mb-4">
@@ -56,7 +90,7 @@ const AccountPage = () => {
 						</div>
 					) : (
 						<div className="w-full grid grid-cols-1 gap-10">
-							{bookings.map((booking) => (
+							{filteredBookings.map((booking) => (
 								<BookingCard key={booking._id} booking={booking} />
 							))}
 						</div>

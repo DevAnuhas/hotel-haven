@@ -4,7 +4,6 @@ import {
 	EllipsisVertical,
 	CalendarOff,
 	ChevronRight,
-	// CreditCard,
 	CalendarArrowDown,
 	CalendarArrowUp,
 	BedDouble,
@@ -40,8 +39,9 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { useCancelBookingMutation } from "@/lib/api";
+import { useCancelBookingMutation, useArchiveBookingMutation } from "@/lib/api";
 
 const getStatusColor = (status) => {
 	switch (status.toLowerCase()) {
@@ -70,6 +70,20 @@ export function BookingCard({ booking }) {
 		} catch {
 			toast.dismiss(loadingToastId);
 			toast.error("Unable to cancel booking");
+		}
+	};
+
+	const [archiveBooking] = useArchiveBookingMutation();
+
+	const handleArchiveBooking = async (bookingId) => {
+		const loadingToastId = toast.loading("Archiving booking...");
+		try {
+			await archiveBooking(bookingId).unwrap();
+			toast.dismiss(loadingToastId);
+			toast.success("Booking Archived successfully!");
+		} catch {
+			toast.dismiss(loadingToastId);
+			toast.error("Unable to Archive booking");
 		}
 	};
 
@@ -205,7 +219,8 @@ export function BookingCard({ booking }) {
 										<Button
 											variant="outline"
 											size="icon"
-											className="rounded-full"
+											className="w-8 h-8 p-0 rounded-full"
+											disabled={booking.status === "archived"}
 										>
 											<EllipsisVertical />
 										</Button>
@@ -226,7 +241,10 @@ export function BookingCard({ booking }) {
 													</DialogTrigger>
 												</>
 											) : (
-												<DropdownMenuItem className="flex gap-3">
+												<DropdownMenuItem
+													className="flex gap-3"
+													onClick={() => handleArchiveBooking(booking._id)}
+												>
 													<Archive className="h-4 w-4" />
 													Archive
 												</DropdownMenuItem>
@@ -294,6 +312,41 @@ export function BookingCard({ booking }) {
 							<span className="text-s font-bold">#{booking.bookingId}</span>
 						</p>
 					</CardFooter>
+				</div>
+			</div>
+		</Card>
+	);
+}
+
+export function BookingCardSkeleton() {
+	return (
+		<Card className="w-full overflow-hidden">
+			<div className="flex flex-col md:flex-row">
+				<div className="relative md:w-1/3 p-0">
+					<Skeleton className="w-full h-[300px]" />
+					<Skeleton className="absolute top-6 right-6 w-24 h-6" />
+					<div className="absolute bottom-6 left-6 space-y-2">
+						<Skeleton className="w-48 h-8" />
+						<Skeleton className="w-36 h-6" />
+					</div>
+				</div>
+				<div className="flex-1 flex flex-col justify-between">
+					<div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full  p-10 mb-3">
+						{[...Array(4)].map((_, i) => (
+							<div key={i} className="space-y-2">
+								<Skeleton className="w-24 h-4" />
+								<Skeleton className="w-32 h-6" />
+							</div>
+						))}
+					</div>
+					<div className="flex items-center justify-between px-10 pt-4">
+						<Skeleton className="w-32 h-6" />
+						<Skeleton className="w-24 h-8" />
+					</div>
+					<div className="bg-muted px-10 py-3 mt-8 flex flex-col sm:flex-row justify-between gap-2">
+						<Skeleton className="w-48 h-4" />
+						<Skeleton className="w-36 h-4" />
+					</div>
 				</div>
 			</div>
 		</Card>
