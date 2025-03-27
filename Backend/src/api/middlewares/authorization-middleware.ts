@@ -7,7 +7,7 @@ export const isAdmin = (
 	res: Response,
 	next: NextFunction
 ) => {
-	if (req.auth?.sessionClaims.metadata.role !== "admin") {
+	if (req.auth?.sessionClaims?.metadata?.role !== "admin") {
 		throw new ForbiddenError("Forbidden");
 	}
 	next();

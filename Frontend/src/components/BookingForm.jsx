@@ -111,7 +111,6 @@ export function BookingForm({ hotelId, onSuccess }) {
 	const [createBooking] = useCreateBookingMutation();
 
 	const onSubmit = async (values) => {
-		console.log("Form submitted:", values);
 		const loadingToastId = toast.loading("Creating booking...");
 		try {
 			await createBooking({
@@ -141,7 +140,6 @@ export function BookingForm({ hotelId, onSuccess }) {
 			toast.error("Unable to complete booking", {
 				description:
 					"There was an error processing your booking. Please try again or contact us directly.",
-				duration: 5000,
 			});
 		}
 	};
