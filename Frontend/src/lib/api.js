@@ -27,8 +27,15 @@ export const api = createApi({
 		}),
 		cancelBooking: builder.mutation({
 			query: (id) => ({
-				url: `booking/cancel/${id}`,
+				url: `booking/${id}`,
 				method: "DELETE",
+			}),
+			invalidatesTags: () => [{ type: "Bookings", id: "LIST" }],
+		}),
+		archiveBooking: builder.mutation({
+			query: (id) => ({
+				url: `booking/${id}`,
+				method: "PUT",
 			}),
 			invalidatesTags: () => [{ type: "Bookings", id: "LIST" }],
 		}),
@@ -58,6 +65,7 @@ export const {
 	useGetHotelByIdQuery,
 	useGetBookingsForUserQuery,
 	useCancelBookingMutation,
+	useArchiveBookingMutation,
 	useCreateHotelMutation,
 	useCreateBookingMutation,
 	useSearchHotelsQuery,

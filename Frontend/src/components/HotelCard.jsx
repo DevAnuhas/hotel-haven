@@ -1,6 +1,8 @@
 import { MapPin, Star } from "lucide-react";
 import { Link } from "react-router";
-function HotelCard({ hotel }) {
+import { Skeleton } from "@/components/ui/skeleton";
+
+export function HotelCard({ hotel }) {
 	return (
 		<Link
 			to={`/hotel/${hotel._id}`}
@@ -40,4 +42,31 @@ function HotelCard({ hotel }) {
 	);
 }
 
-export default HotelCard;
+export function HotelCardSkeleton() {
+	return (
+		<div>
+			<div className="relative aspect-[4/3] overflow-hidden rounded-xl">
+				<Skeleton className="absolute inset-0" />
+			</div>
+
+			<div className="mt-3 space-y-2 p-4">
+				<Skeleton className="h-7 w-3/4" />
+
+				<div className="flex items-center gap-1">
+					<Skeleton className="h-4 w-4" />
+					<Skeleton className="h-4 w-32" />
+				</div>
+
+				<div className="flex items-center gap-1">
+					<Skeleton className="h-4 w-4" />
+					<Skeleton className="h-4 w-8" />
+					<Skeleton className="h-4 w-24" />
+				</div>
+
+				<div className="flex items-baseline">
+					<Skeleton className="h-7 w-20" />
+				</div>
+			</div>
+		</div>
+	);
+}

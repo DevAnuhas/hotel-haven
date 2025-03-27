@@ -51,6 +51,7 @@ const generateBookingId = (booking: any) => {
 	return `${hotelCode}${dateStr}-${counter}`;
 };
 
+// Utility function to calculate total price of a booking
 const calculateTotalPrice = (booking: any) => {
 	const pricePerNight = booking.price || 0;
 
@@ -176,13 +177,38 @@ export const getBookingsForUser = async (
 	}
 };
 
+export const updateBooking = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const bookingId = req.params.bookingId;
+		const booking = await Booking.findById(bookingId);
+
+		if (!booking) {
+			throw new NotFoundError("Booking not found");
+		}
+
+		// TODO: Update booking
+		// const updatedHotel = UpdateHotelDTO.safeParse(req.body);
+		// await Booking.findByIdAndUpdate(bookingId, updatedHotel.data);
+
+		res.status(200).json({
+			message: "Booking updated successfully!",
+		});
+		return;
+	} catch (error) {
+		next(error);
+	}
+};
+
 export const cancelBooking = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
 	try {
-		console.log(req.params.bookingId);
 		const bookingId = req.params.bookingId;
 		const booking = await Booking.findById(bookingId);
 
@@ -194,6 +220,30 @@ export const cancelBooking = async (
 
 		res.status(200).json({
 			message: "Booking cancelled successfully!",
+		});
+		return;
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const archiveBooking = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const bookingId = req.params.bookingId;
+		const booking = await Booking.findById(bookingId);
+
+		if (!booking) {
+			throw new NotFoundError("Booking not found");
+		}
+
+		await Booking.findByIdAndUpdate(bookingId, { status: "archived" });
+
+		res.status(200).json({
+			message: "Booking archived successfully!",
 		});
 		return;
 	} catch (error) {
