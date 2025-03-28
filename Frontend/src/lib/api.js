@@ -16,46 +16,46 @@ export const api = createApi({
 	}),
 	endpoints: (builder) => ({
 		getHotels: builder.query({
-			query: () => `hotel`,
+			query: () => `hotels`,
 		}),
 		getHotelById: builder.query({
-			query: (id) => `hotel/${id}`,
+			query: (id) => `hotels/${id}`,
 		}),
 		getBookingsForUser: builder.query({
-			query: (id) => `booking/user/${id}`,
+			query: (id) => `bookings/user/${id}`,
 			providesTags: () => [{ type: "Bookings", id: "LIST" }],
 		}),
 		cancelBooking: builder.mutation({
 			query: (id) => ({
-				url: `booking/${id}`,
+				url: `bookings/${id}`,
 				method: "DELETE",
 			}),
 			invalidatesTags: () => [{ type: "Bookings", id: "LIST" }],
 		}),
 		archiveBooking: builder.mutation({
 			query: (id) => ({
-				url: `booking/${id}`,
+				url: `bookings/${id}`,
 				method: "PUT",
 			}),
 			invalidatesTags: () => [{ type: "Bookings", id: "LIST" }],
 		}),
 		createHotel: builder.mutation({
 			query: (hotel) => ({
-				url: `hotel`,
+				url: `hotels`,
 				method: "POST",
 				body: hotel,
 			}),
 		}),
 		createBooking: builder.mutation({
 			query: (booking) => ({
-				url: `booking`,
+				url: `bookings`,
 				method: "POST",
 				body: booking,
 			}),
 		}),
 		searchHotels: builder.query({
 			query: (query) =>
-				`hotel/search/retrieve?query=${encodeURIComponent(query)}`,
+				`hotels/search/retrieve?query=${encodeURIComponent(query)}`,
 		}),
 	}),
 });

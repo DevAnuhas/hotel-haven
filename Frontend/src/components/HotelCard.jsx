@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function HotelCard({ hotel }) {
+	const lowestPrice = Math.min(...hotel.rooms.map((room) => room.basePrice));
 	return (
 		<Link
 			to={`/hotel/${hotel._id}`}
@@ -11,7 +12,7 @@ export function HotelCard({ hotel }) {
 		>
 			<div className="relative aspect-[4/3] overflow-hidden rounded-xl">
 				<img
-					src={hotel.image}
+					src={hotel.images.main}
 					alt={hotel.name}
 					className="object-cover w-full h-full absolute transition-transform group-hover:scale-105"
 				/>
@@ -21,21 +22,21 @@ export function HotelCard({ hotel }) {
 				<h3 className="font-semibold text-lg">{hotel.name}</h3>
 				<div className="flex items-center text-muted-foreground">
 					<MapPin className="h-4 w-4 mr-1" />
-					<span>{hotel.location}</span>
+					<span>
+						{hotel.location.city}, {hotel.location.country}
+					</span>
 				</div>
 				<div className="flex items-center space-x-1">
-					{hotel.rating ? (
-						<>
-							<Star className="h-4 w-4 fill-primary text-primary" />
-							<span className="text-muted-foreground">{hotel.rating}</span>
-						</>
-					) : null}
+					<Star className="h-4 w-4 fill-primary text-primary" />
 					<span className="text-muted-foreground">
-						({hotel.reviews?.toLocaleString() || "0"} reviews)
+						{hotel.rating.average}/10
+					</span>
+					<span className="text-muted-foreground">
+						({hotel.reviews.length} reviews)
 					</span>
 				</div>
 				<div className="flex items-baseline space-x-2">
-					<span className="text-xl font-bold">${hotel.price}</span>
+					<span className="text-xl font-bold">From ${lowestPrice}</span>
 				</div>
 			</div>
 		</Link>

@@ -137,7 +137,7 @@ function HotelsPage() {
 								<h1 className="text-3xl font-bold">{hotel.name}</h1>
 								<div className="flex items-center mt-2">
 									<MapPin className="text-muted-foreground mr-1" size={20} />
-									<p className="text-muted-foreground">{hotel.location}</p>
+									<p className="text-muted-foreground">{}</p>
 								</div>
 							</div>
 							<button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 w-9">
@@ -146,10 +146,10 @@ function HotelsPage() {
 							</button>
 						</div>
 						<div className="flex items-center space-x-1">
-							{hotel.rating ? (
+							{hotel.rating.count ? (
 								<>
 									<Star fill="currentColor" size={20} />
-									<span className="font-bold">{hotel.rating}</span>
+									<span className="font-bold">{hotel.rating.count}</span>
 								</>
 							) : null}
 							<span className="text-muted-foreground">
