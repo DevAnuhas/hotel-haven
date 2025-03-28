@@ -17,8 +17,10 @@ bookingRouter
 	.route("/")
 	.post(isAuthenticated, createBooking)
 	.get(isAdmin, getAllBookings);
-bookingRouter.route("/hotel/:hotelId").get(getBookingsForHotel);
-bookingRouter.route("/user/:userId").get(getBookingsForUser);
+bookingRouter
+	.route("/hotel/:hotelId")
+	.get(isAuthenticated, getBookingsForHotel);
+bookingRouter.route("/user/:userId").get(isAuthenticated, getBookingsForUser);
 bookingRouter
 	.route("/:bookingId")
 	.patch(isAuthenticated, updateBooking)

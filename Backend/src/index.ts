@@ -33,8 +33,8 @@ app.get("/", (req, res) => {
 });
 
 // Define the API routes
-app.use("/api/hotel", hotelRouter);
-app.use("/api/booking", bookingRouter);
+app.use("/api/hotels", hotelRouter);
+app.use("/api/bookings", bookingRouter);
 
 // Middleware to handle errors
 app.use(globalErrorHandlingMiddleware);
