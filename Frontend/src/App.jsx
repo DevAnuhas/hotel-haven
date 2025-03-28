@@ -10,7 +10,8 @@ import AdminProtectedLayout from "./layouts/admin-protected.layout";
 import HomePage from "./pages/home.page";
 import SignInPage from "./pages/sign-in.page";
 import SignUpPage from "./pages/sign-up.page";
-import HotelPage from "./pages/hotel.page";
+import HotelsPage from "./pages/hotels.page";
+import HotelDetails from "./pages/hotel-details.page";
 import CreateHotelPage from "./pages/create-hotel.page";
 import AccountPage from "./pages/account.page";
 
@@ -22,7 +23,8 @@ function App() {
 				<Route element={<RootLayout />}>
 					<Route element={<MainLayout />}>
 						<Route path="/" element={<HomePage />} />
-						<Route path="/hotel/:id" element={<HotelPage />} />
+						<Route path="/hotels" element={<HotelsPage />} />
+						<Route path="/hotel/:id" element={<HotelDetails />} />
 						<Route element={<ProtectedLayout />}>
 							<Route path="/account" element={<AccountPage />} />
 						</Route>

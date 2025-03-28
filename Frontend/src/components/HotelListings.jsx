@@ -37,7 +37,9 @@ export default function HotelListings() {
 		selectedSorting === "all"
 			? hotelsToDisplay
 			: hotelsToDisplay.filter((hotel) =>
-					hotel.location.toLowerCase().includes(selectedSorting.toLowerCase())
+					hotel.location.country
+						.toLowerCase()
+						.includes(selectedSorting.toLowerCase())
 			  );
 
 	const sortingTab = sortingList.map((sorting) => (
