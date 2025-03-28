@@ -39,93 +39,91 @@ export default function HotelDetails() {
 
 	if (isLoading)
 		return (
-			<div className="container mx-auto px-4 min-h-screen">
-				<div className="container mx-auto py-16 mt-16">
-					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-						{/* Left Section */}
-						<div className="lg:col-span-2">
-							<div className="mb-6">
-								{/* Hotel Header */}
-								<div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-									<div>
-										<Skeleton className="h-8 w-48 mb-2" />
-										<Skeleton className="h-5 w-32 mb-2" />
-										<Skeleton className="h-4 w-64" />
-									</div>
-									<div className="text-right">
-										<Skeleton className="h-8 w-16 mb-1" />
-										<Skeleton className="h-4 w-32" />
-									</div>
+			<div className="container mx-auto px-4 py-16 mt-16 min-h-screen">
+				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+					{/* Left Section */}
+					<div className="lg:col-span-2">
+						<div className="mb-6">
+							{/* Hotel Header */}
+							<div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+								<div>
+									<Skeleton className="h-8 w-48 mb-2" />
+									<Skeleton className="h-5 w-32 mb-2" />
+									<Skeleton className="h-4 w-64" />
 								</div>
-
-								{/* Main Image */}
-								<Skeleton className="relative aspect-[16/9] w-full rounded-lg mb-4" />
-
-								{/* Gallery */}
-								<div className="grid grid-cols-4 gap-2">
-									{[...Array(4)].map((_, index) => (
-										<Skeleton
-											key={index}
-											className="relative aspect-square w-full rounded-lg"
-										/>
-									))}
+								<div className="text-right">
+									<Skeleton className="h-8 w-16 mb-1" />
+									<Skeleton className="h-4 w-32" />
 								</div>
 							</div>
+
+							{/* Main Image */}
+							<Skeleton className="relative aspect-[16/9] w-full rounded-lg mb-4" />
+
+							{/* Gallery */}
+							<div className="grid grid-cols-4 gap-2">
+								{[...Array(4)].map((_, index) => (
+									<Skeleton
+										key={index}
+										className="relative aspect-square w-full rounded-lg"
+									/>
+								))}
+							</div>
 						</div>
+					</div>
 
-						{/* Right Section */}
-						<div className="lg:col-span-1">
-							<Card className="sticky top-8">
-								<CardHeader>
-									<CardTitle>
-										<Skeleton className="h-6 w-32" />
-									</CardTitle>
-									<CardDescription>
-										<Skeleton className="h-4 w-48" />
-									</CardDescription>
-								</CardHeader>
-								<CardContent>
-									<div className="space-y-4">
-										{/* Check-in/Check-out */}
-										<div>
-											<Skeleton className="h-4 w-32 mb-2" />
-											<div className="grid grid-cols-2 gap-2">
-												<Skeleton className="h-10 w-full rounded-md" />
-												<Skeleton className="h-10 w-full rounded-md" />
-											</div>
-										</div>
-
-										{/* Guests */}
-										<div>
-											<Skeleton className="h-4 w-32 mb-2" />
+					{/* Right Section */}
+					<div className="lg:col-span-1">
+						<Card className="sticky top-8">
+							<CardHeader>
+								<CardTitle>
+									<Skeleton className="h-6 w-32" />
+								</CardTitle>
+								<CardDescription>
+									<Skeleton className="h-4 w-48" />
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<div className="space-y-4">
+									{/* Check-in/Check-out */}
+									<div>
+										<Skeleton className="h-4 w-32 mb-2" />
+										<div className="grid grid-cols-2 gap-2">
+											<Skeleton className="h-10 w-full rounded-md" />
 											<Skeleton className="h-10 w-full rounded-md" />
 										</div>
-
-										<Separator />
-
-										{/* Selected Room */}
-										<div>
-											<Skeleton className="h-4 w-32 mb-2" />
-											<Skeleton className="h-16 w-full rounded-md" />
-										</div>
-
-										<Separator />
-
-										{/* Pricing */}
-										<div className="space-y-2">
-											<Skeleton className="h-4 w-full" />
-											<Skeleton className="h-4 w-full" />
-											<Separator />
-											<Skeleton className="h-6 w-full" />
-										</div>
-
-										<Skeleton className="h-10 w-full" />
-
-										<Skeleton className="h-4 w-48 mx-auto" />
 									</div>
-								</CardContent>
-							</Card>
-						</div>
+
+									{/* Guests */}
+									<div>
+										<Skeleton className="h-4 w-32 mb-2" />
+										<Skeleton className="h-10 w-full rounded-md" />
+									</div>
+
+									<Separator />
+
+									{/* Selected Room */}
+									<div>
+										<Skeleton className="h-4 w-32 mb-2" />
+										<Skeleton className="h-16 w-full rounded-md" />
+									</div>
+
+									<Separator />
+
+									{/* Pricing */}
+									<div className="space-y-2">
+										<Skeleton className="h-4 w-full" />
+										<Skeleton className="h-4 w-full" />
+										<Separator />
+										<Skeleton className="h-6 w-full" />
+									</div>
+
+									<Skeleton className="h-10 w-full" />
+
+									<Skeleton className="h-4 w-48 mx-auto" />
+								</div>
+							</CardContent>
+						</Card>
 					</div>
 				</div>
 			</div>
@@ -208,12 +206,12 @@ export default function HotelDetails() {
 							{hotel.images.gallery.slice(0, 4).map((image, index) => (
 								<div
 									key={index}
-									className="relative aspect-square overflow-hidden rounded-lg"
+									className="relative aspect-square overflow-hidden"
 								>
 									<img
 										src={image || "/assets/placeholder.svg"}
 										alt={`${hotel.name} gallery ${index + 1}`}
-										className="object-cover"
+										className="h-full object-cover"
 									/>
 								</div>
 							))}

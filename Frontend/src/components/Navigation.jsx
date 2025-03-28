@@ -24,6 +24,7 @@ function Navigation() {
 			</div>
 
 			<div className="flex items-center space-x-4">
+				<Link to="/hotels">Explore Hotels</Link>
 				<Button variant="ghost">
 					<Globe className="h-5 w-5 mr-2" />
 					EN

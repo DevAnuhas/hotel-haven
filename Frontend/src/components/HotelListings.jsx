@@ -73,7 +73,7 @@ export default function HotelListings() {
 				</div>
 			</div>
 			<div className="flex gap-4 py-4">{sortingTab}</div>
-			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
+			<div className="grid grid-cols-1 gap-8 mt-8">
 				{isFetchingSearch || isHotelsLoading ? (
 					Array.from({ length: 8 }, (_, index) => (
 						<HotelCardSkeleton key={index} />
