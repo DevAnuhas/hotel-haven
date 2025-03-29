@@ -39,7 +39,7 @@ export default function HotelDetails() {
 
 	if (isLoading)
 		return (
-			<div className="container mx-auto px-4 py-16 mt-16 min-h-screen">
+			<div className="container mx-auto px-4 py-8 min-h-screen mt-24">
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					{/* Left Section */}
 					<div className="lg:col-span-2">
@@ -390,69 +390,69 @@ export default function HotelDetails() {
 						<TabsContent value="amenities" className="pt-4">
 							<div>
 								<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-									{hotel.features.breakfastIncluded && (
+									{hotel.amenities.breakfastIncluded && (
 										<div className="flex items-center gap-2">
 											<Sandwich className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Breakfast Included</span>
 										</div>
 									)}
-									{hotel.features.freeAirportShuttle && (
+									{hotel.amenities.freeAirportShuttle && (
 										<div className="flex items-center gap-2">
 											<BusFront className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Airport Shuttle</span>
 										</div>
 									)}
 
-									{hotel.features.freeWifi && (
+									{hotel.amenities.freeWifi && (
 										<div className="flex items-center gap-2">
 											<Wifi className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Free WiFi</span>
 										</div>
 									)}
 
-									{hotel.features.freeParking && (
+									{hotel.amenities.freeParking && (
 										<div className="flex items-center gap-2">
 											<SquareParking className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Free Parking</span>
 										</div>
 									)}
 
-									{hotel.features.swimmingPool && (
+									{hotel.amenities.swimmingPool && (
 										<div className="flex items-center gap-2">
 											<WavesLadder className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Swimming Pool</span>
 										</div>
 									)}
 
-									{hotel.features.petsAllowed && (
+									{hotel.amenities.petsAllowed && (
 										<div className="flex items-center gap-2">
 											<Dog className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Pets Allowed</span>
 										</div>
 									)}
 
-									{hotel.features.restaurant && (
+									{hotel.amenities.restaurant && (
 										<div className="flex items-center gap-2">
 											<Utensils className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Restaurant</span>
 										</div>
 									)}
 
-									{hotel.features.bar && (
+									{hotel.amenities.bar && (
 										<div className="flex items-center gap-2">
 											<Beer className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Bar</span>
 										</div>
 									)}
 
-									{hotel.features.gym && (
+									{hotel.amenities.gym && (
 										<div className="flex items-center gap-2">
 											<Dumbbell className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Gym</span>
 										</div>
 									)}
 
-									{hotel.features.spa && (
+									{hotel.amenities.spa && (
 										<div className="flex items-center gap-2">
 											<Leaf className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />
 											<span>Spa</span>

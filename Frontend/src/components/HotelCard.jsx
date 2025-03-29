@@ -23,19 +23,19 @@ export function HotelCard({ hotel }) {
 	const getFeatureIcons = () => {
 		const icons = [];
 
-		if (hotel.features.freeWifi) {
+		if (hotel.amenities.freeWifi) {
 			icons.push(<WifiIcon key="wifi" className="h-4 w-4" />);
 		}
 
-		if (hotel.features.restaurant) {
+		if (hotel.amenities.restaurant) {
 			icons.push(<UtensilsIcon key="restaurant" className="h-4 w-4" />);
 		}
 
-		if (hotel.features.gym) {
+		if (hotel.amenities.gym) {
 			icons.push(<DumbbellIcon key="gym" className="h-4 w-4" />);
 		}
 
-		if (hotel.features.swimmingPool) {
+		if (hotel.amenities.swimmingPool) {
 			icons.push(<WavesLadder key="pool" className="h-4 w-4" />);
 		}
 
@@ -44,16 +44,21 @@ export function HotelCard({ hotel }) {
 
 	return (
 		<Card className="overflow-hidden">
-			<CardContent className="p-0">
-				<div className="grid md:grid-cols-3 gap-4">
+			<CardContent className="@container p-0">
+				<div className="grid @md:grid-cols-3 gap-4">
 					<div className="relative aspect-[16/9] overflow-hidden flex justify-center w-full h-full">
 						<img
 							src={hotel.images.main || "/assets/placeholder.svg"}
 							alt={hotel.name}
 							className="object-cover w-full h-full"
 						/>
+						{hotel.confidence && (
+							<Badge className="absolute left-4 top-4">
+								Match Score: {hotel.matchScore.toFixed(2) * 100}%
+							</Badge>
+						)}
 					</div>
-					<div className="p-6 md:col-span-2">
+					<div className="p-6 @md:col-span-2">
 						<div className="flex justify-between items-start">
 							<div>
 								<h3 className="text-xl font-bold mb-1">{hotel.name}</h3>
@@ -126,29 +131,44 @@ export function HotelCard({ hotel }) {
 
 export function HotelCardSkeleton() {
 	return (
-		<div>
-			<div className="relative aspect-[4/3] overflow-hidden rounded-xl">
-				<Skeleton className="absolute inset-0" />
-			</div>
-
-			<div className="mt-3 space-y-2 p-4">
-				<Skeleton className="h-7 w-3/4" />
-
-				<div className="flex items-center gap-1">
-					<Skeleton className="h-4 w-4" />
-					<Skeleton className="h-4 w-32" />
+		<Card className="overflow-hidden">
+			<CardContent className="p-0">
+				<div className="grid @md:grid-cols-3 gap-4">
+					<div className="relative aspect-[16/9] overflow-hidden flex justify-center w-full h-full">
+						<Skeleton className="w-full h-full" />
+					</div>
+					<div className="p-6 @md:col-span-2">
+						<div className="flex justify-between items-start mb-8">
+							<div>
+								<Skeleton className="h-6 w-48 mb-1" />
+								<Skeleton className="h-6 w-28 mb-1" />
+								<Skeleton className="h-4 w-24" />
+							</div>
+							<div className="text-right">
+								<Skeleton className="h-6 w-10 mb-1" />
+								<Skeleton className="h-4 w-16" />
+							</div>
+						</div>
+						<Skeleton className="h-4 w-full mb-4" />
+						<Skeleton className="h-4 w-5/6 mb-4" />
+						<div className="flex flex-wrap gap-2 mb-4">
+							{Array(4)
+								.fill(0)
+								.map((_, i) => (
+									<Skeleton key={i} className="w-8 h-8 rounded-full bg-muted" />
+								))}
+						</div>
+						<div className="flex justify-between items-end mt-auto">
+							<div>
+								<Skeleton className="h-4 w-20 mb-1" />
+								<Skeleton className="h-6 w-16 mb-1" />
+								<Skeleton className="h-4 w-12" />
+							</div>
+							<Skeleton className="h-10 w-28" />
+						</div>
+					</div>
 				</div>
-
-				<div className="flex items-center gap-1">
-					<Skeleton className="h-4 w-4" />
-					<Skeleton className="h-4 w-8" />
-					<Skeleton className="h-4 w-24" />
-				</div>
-
-				<div className="flex items-baseline">
-					<Skeleton className="h-7 w-20" />
-				</div>
-			</div>
-		</div>
+			</CardContent>
+		</Card>
 	);
 }
