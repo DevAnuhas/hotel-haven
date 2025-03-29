@@ -14,6 +14,7 @@ import HotelsPage from "./pages/hotels.page";
 import HotelDetails from "./pages/hotel-details.page";
 import CreateHotelPage from "./pages/create-hotel.page";
 import AccountPage from "./pages/account.page";
+import BookingPage from "./pages/booking.page";
 
 function App() {
 	return (
@@ -21,6 +22,7 @@ function App() {
 			<ScrollToTop />
 			<Routes>
 				<Route element={<RootLayout />}>
+					<Route path="/booking" element={<BookingPage />} />
 					<Route element={<MainLayout />}>
 						<Route path="/" element={<HomePage />} />
 						<Route path="/hotels" element={<HotelsPage />} />
