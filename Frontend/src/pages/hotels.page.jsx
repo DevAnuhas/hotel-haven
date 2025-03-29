@@ -46,6 +46,8 @@ export function HotelsPage() {
 		new Set(hotels.map((hotel) => hotel.location.city))
 	);
 
+	// TODO: Use semantic search to filter hotels
+
 	// Filter hotels based on search criteria
 	const filteredHotels = hotels.filter((hotel) => {
 		// Search term filter (name or description)
@@ -63,14 +65,21 @@ export function HotelsPage() {
 
 		// Star rating filter
 		const matchesStarRating =
-			!starRating || hotel.starRating.toString() === starRating;
+			!starRating ||
+			starRating === "any" ||
+			hotel.starRating.toString() === starRating;
 
 		// City filter
-		const matchesCity = !selectedCity || hotel.location.city === selectedCity;
+		const matchesCity =
+			!selectedCity ||
+			selectedCity === "all" ||
+			hotel.location.city === selectedCity;
 
 		// Category filter
 		const matchesCategory =
-			!selectedCategory || hotel.category === selectedCategory;
+			!selectedCategory ||
+			selectedCategory === "any" ||
+			hotel.category === selectedCategory;
 
 		// Amenities filter
 		const matchesAmenities =
@@ -255,7 +264,7 @@ export function HotelsPage() {
 					</Select>
 				</div>
 
-				<div className="grid grid-cols-1 gap-6">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					{filteredHotels.length > 0 ? (
 						filteredHotels.map((hotel) => (
 							<HotelCard key={hotel._id} hotel={hotel} />
