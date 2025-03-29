@@ -15,6 +15,7 @@ import HotelDetails from "./pages/hotel-details.page";
 import CreateHotelPage from "./pages/create-hotel.page";
 import AccountPage from "./pages/account.page";
 import BookingPage from "./pages/booking.page";
+import BookingConfirmation from "./components/BookingConfirmation";
 
 function App() {
 	return (
@@ -23,6 +24,10 @@ function App() {
 			<Routes>
 				<Route element={<RootLayout />}>
 					<Route path="/booking" element={<BookingPage />} />
+					<Route
+						path="/booking/confirmation"
+						element={<BookingConfirmation />}
+					/>
 					<Route element={<MainLayout />}>
 						<Route path="/" element={<HomePage />} />
 						<Route path="/hotels" element={<HotelsPage />} />

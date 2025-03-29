@@ -7,6 +7,11 @@ const bookingSchema = new mongoose.Schema(
 			ref: "Hotel",
 			required: true,
 		},
+		roomId: {
+			type: Number,
+			ref: "Room",
+			required: true,
+		},
 		userId: {
 			type: String,
 			required: true,
@@ -35,17 +40,21 @@ const bookingSchema = new mongoose.Schema(
 			type: Date,
 			required: true,
 		},
-		roomType: {
-			type: String,
-			required: true,
-		},
 		adults: {
-			type: String,
+			type: Number,
 			required: true,
 		},
 		children: {
-			type: String,
+			type: Number,
 			required: true,
+		},
+		price: {
+			type: Number,
+			required: true,
+		},
+		tax: {
+			type: Number,
+			default: 0,
 		},
 		specialRequests: {
 			type: String,

@@ -2,6 +2,7 @@ import express from "express";
 import {
 	createBooking,
 	getAllBookings,
+	getBookingById,
 	getBookingsForHotel,
 	getBookingsForUser,
 	updateBooking,
@@ -23,6 +24,7 @@ bookingRouter
 bookingRouter.route("/user/:userId").get(isAuthenticated, getBookingsForUser);
 bookingRouter
 	.route("/:bookingId")
+	.get(getBookingById)
 	.patch(isAuthenticated, updateBooking)
 	.delete(isAuthenticated, cancelBooking)
 	.put(isAuthenticated, archiveBooking);
