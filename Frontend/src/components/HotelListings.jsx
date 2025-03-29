@@ -18,35 +18,30 @@ export default function HotelListings() {
 	// Use search results if available, otherwise use all hotels
 	const hotelsToDisplay = searchResults || hotels;
 
-	// TODO: Add dynamic sorting options based on hotel locations
-	const sortingList = [
-		{ name: "All", value: "all" },
-		{ name: "France", value: "france" },
-		{ name: "Australia", value: "australia" },
-		{ name: "Japan", value: "japan" },
-		{ name: "Italy", value: "italy" },
-	];
+	const countries = Array.from(
+		new Set(hotelsToDisplay?.map((hotel) => hotel.location.country))
+	);
 
-	const [selectedSorting, setSelectedSorting] = useState("all");
+	const [selectedCountry, setSelectedCountry] = useState("All");
 
 	const handleSelectedSorting = (sorting) => {
-		setSelectedSorting(sorting);
+		setSelectedCountry(sorting);
 	};
 
 	const filteredHotels =
-		selectedSorting === "all"
-			? hotelsToDisplay
-			: hotelsToDisplay.filter((hotel) =>
+		selectedCountry === "All"
+			? hotelsToDisplay?.slice(0, 6)
+			: hotelsToDisplay?.filter((hotel) =>
 					hotel.location.country
 						.toLowerCase()
-						.includes(selectedSorting.toLowerCase())
+						.includes(selectedCountry?.toLowerCase())
 			  );
 
-	const sortingTab = sortingList.map((sorting) => (
+	const sortingTab = ["All", ...countries].map((country) => (
 		<SortingTab
-			key={sorting.value}
-			selectedSorting={selectedSorting}
-			sorting={sorting}
+			key={country}
+			selectedSorting={selectedCountry}
+			sorting={country}
 			onClick={handleSelectedSorting}
 		/>
 	));
@@ -66,16 +61,16 @@ export default function HotelListings() {
 					{isFetchingSearch || isHotelsLoading ? (
 						<Skeleton className="h-5 w-[700px] mt-6" />
 					) : searchQuery ? (
-						`Search Results for "${searchQuery}"`
+						`AI-Powered Hotel Recommendations for "${searchQuery}"`
 					) : (
 						"Discover the most trending hotels worldwide for an unforgettable experience."
 					)}
 				</div>
 			</div>
 			<div className="flex gap-4 py-4">{sortingTab}</div>
-			<div className="grid grid-cols-1 gap-8 mt-8">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
 				{isFetchingSearch || isHotelsLoading ? (
-					Array.from({ length: 8 }, (_, index) => (
+					Array.from({ length: 6 }, (_, index) => (
 						<HotelCardSkeleton key={index} />
 					))
 				) : (

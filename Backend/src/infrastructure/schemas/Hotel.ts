@@ -44,12 +44,6 @@ const HotelSchema = new Schema(
 			max: 5,
 			default: 3,
 		},
-		amenities: {
-			general: [String], // WiFi, Parking, etc.
-			wellness: [String], // Spa, Gym, etc.
-			food: [String], // Restaurant, Bar, etc.
-			services: [String], // Room Service, Concierge, etc.
-		},
 		policies: {
 			checkInTime: String,
 			checkOutTime: String,
@@ -106,7 +100,7 @@ const HotelSchema = new Schema(
 				default: false,
 			},
 		},
-		features: {
+		amenities: {
 			breakfastIncluded: {
 				type: Boolean,
 				default: false,
@@ -162,82 +156,3 @@ const HotelSchema = new Schema(
 );
 
 export default mongoose.model("Hotel", HotelSchema);
-
-// Create indexes for common search queries
-/* HotelSchema.index({
-	"location.address.city": 1,
-	"location.address.country": 1,
-});
-HotelSchema.index({
-	"features.breakfastIncluded": 1,
-	"features.freeAirportShuttle": 1,
-});
-HotelSchema.index({ "rating.average": -1 });
-HotelSchema.index({ "pricing.basePrice": 1 });
-
-// Virtual for calculating the display price based on base price and tax
-HotelSchema.virtual("displayPrice").get(function () {
-	const basePrice = this.pricing.basePrice;
-	return this.pricing.includeTaxInDisplay
-		? basePrice * (1 + this.pricing.taxRate)
-		: basePrice;
-});
-
-// Method to check availability for a date range
-HotelSchema.methods.checkAvailability = function (
-	startDate,
-	endDate,
-	roomType,
-	guests
-) {
-	// This would be implemented to check against a separate Booking collection
-	// For now, just returning true as a placeholder
-	return true;
-};
-
-// Create and export the model
-const Hotel = mongoose.models.Hotel || mongoose.model("Hotel", HotelSchema);
-
-export default Hotel;
-
-// Example usage:
-const newHotel = new Hotel({
-	name: "Hotel Norrebro",
-	description: "A beautiful hotel in the heart of Copenhagen",
-	location: {
-		address: {
-			city: "Copenhagen",
-			country: "Denmark",
-		},
-		coordinates: {
-			coordinates: [12.5683, 55.6761], // longitude, latitude
-		},
-		distanceFromCenter: 0.4,
-	},
-	starRating: 4,
-	amenities: {
-		general: ["Free WiFi", "24-hour front desk", "Elevator"],
-		food: ["Restaurant", "Bar", "Breakfast"],
-	},
-	features: {
-		breakfastIncluded: true,
-		freeWifi: true,
-	},
-	rooms: [
-		{
-			type: "Comfort",
-			name: "Comfort King Room",
-			bedType: "king size",
-			maxOccupancy: 2,
-			basePrice: 180,
-		},
-	],
-	rating: {
-		average: 9.6,
-		count: 1920,
-		category: "Excellent",
-	},
-	tags: ["hot deal", "Popular"],
-});
-
-console.log(newHotel); */

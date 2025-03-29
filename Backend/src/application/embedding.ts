@@ -5,6 +5,39 @@ import { Document } from "@langchain/core/documents";
 import mongoose from "mongoose";
 import Hotel from "../infrastructure/schemas/Hotel";
 
+interface Room {
+	basePrice: number;
+}
+
+interface Amenities {
+	[key: string]: boolean;
+}
+
+interface Location {
+	city: string;
+	country: string;
+}
+
+interface Rating {
+	average: number;
+	count: number;
+}
+
+interface HotelDocument extends mongoose.Document {
+	_id: mongoose.Types.ObjectId;
+	name: string;
+	description: string;
+	location: Location;
+	category: string;
+	starRating: number;
+	amenities: Amenities;
+	pricing: {
+		currency: string;
+	};
+	rating: Rating;
+	rooms: Room[];
+}
+
 export const createEmbeddings = async (
 	req: Request,
 	res: Response,
@@ -21,16 +54,39 @@ export const createEmbeddings = async (
 			indexName: "vector_index",
 		});
 
-		const hotels = await Hotel.find();
+		const hotels = await Hotel.find<HotelDocument>();
 
-		const docs = hotels.map((hotel, index) => {
-			const { _id, location, price, description } = hotel;
-			const doc = new Document({
-				pageContent: `${description} Located in ${location}. Price per Night: ${price}`,
+		const docs = hotels.map((hotel) => {
+			const {
+				_id,
+				name,
+				description,
+				location,
+				category,
+				starRating,
+				amenities,
+				pricing,
+				rating,
+				rooms,
+			} = hotel;
+
+			const minPrice =
+				rooms.length > 0 ? Math.min(...rooms.map((room) => room.basePrice)) : 0;
+
+			const allAmenities = Object.entries(amenities)
+				.filter(([_, value]) => value === true)
+				.map(([key]) => key.replace(/([A-Z])/g, " $1").toLowerCase())
+				.join(", ");
+
+			const pageContent = `${name}, a ${starRating}-star ${category} hotel located in ${location.city}, ${location.country}. ${description} Amenities include: ${allAmenities}. Starting price: ${minPrice} ${pricing.currency}. Average rating: ${rating.average}/10 based on ${rating.count} reviews.`;
+
+			return new Document({
+				pageContent,
 				metadata: { _id },
 			});
-			return doc;
 		});
+
+		console.log(docs);
 
 		await vectorStore.addDocuments(docs);
 
