@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { useParams } from "react-router";
-// import { useUser } from "@clerk/clerk-react";
+import { useParams, useNavigate } from "react-router";
 import { useGetHotelByIdQuery } from "@/lib/api";
+import { differenceInDays, addDays } from "date-fns";
+import { DateRangePicker } from "@/components/ui/date-range-picker";
+import { GuestSelector } from "@/components/ui/guest-selector";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -34,8 +36,15 @@ import {
 
 export default function HotelDetails() {
 	const { id } = useParams();
+	const navigate = useNavigate();
 	const { data: hotel, isLoading, isError, error } = useGetHotelByIdQuery(id);
 	const [selectedRoom, setSelectedRoom] = useState(null);
+	const [dateRange, setDateRange] = useState({
+		from: addDays(new Date(), 1),
+		to: addDays(new Date(), 4),
+	});
+	const [adults, setAdults] = useState(2);
+	const [children, setChildren] = useState(0);
 
 	if (isLoading)
 		return (
@@ -142,12 +151,40 @@ export default function HotelDetails() {
 		);
 	}
 
+	const nights =
+		dateRange?.from && dateRange?.to
+			? differenceInDays(dateRange.to, dateRange.from)
+			: 0;
+
+	// Calculate total price
+	const roomPrice = selectedRoom ? selectedRoom.basePrice * nights : 0;
+	const taxAmount = roomPrice * hotel.pricing.taxRate;
+	const totalPrice = roomPrice + taxAmount;
+
+	const handleGuestsChange = (newAdults, newChildren) => {
+		setAdults(newAdults);
+		setChildren(newChildren);
+	};
+
+	const handleBookNow = () => {
+		if (!selectedRoom || !dateRange?.from || !dateRange?.to) return;
+
+		// Format dates for URL
+		const checkIn = dateRange.from.toISOString().split("T")[0];
+		const checkOut = dateRange.to.toISOString().split("T")[0];
+
+		// Navigate to booking page
+		navigate(
+			`/booking?hotelId=${hotel._id}&roomId=${hotel.rooms.indexOf(
+				selectedRoom
+			)}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}&children=${children}&price=${totalPrice.toFixed(
+				2
+			)}&tax=${taxAmount.toFixed(2)}`
+		);
+	};
+
 	// Generate star rating display
 	const stars = Array(hotel.starRating).fill(0);
-
-	const handleBooking = () => {
-		// TODO: Implement booking logic
-	};
 
 	return (
 		<div className="container mx-auto py-16 mt-12">
@@ -635,23 +672,21 @@ export default function HotelDetails() {
 									<h3 className="text-sm font-medium mb-1">
 										Check-in / Check-out
 									</h3>
-									<div className="grid grid-cols-2 gap-2">
-										<div className="border rounded-md p-2">
-											<p className="text-xs text-muted-foreground">Check-in</p>
-											<p className="font-medium">Select date</p>
-										</div>
-										<div className="border rounded-md p-2">
-											<p className="text-xs text-muted-foreground">Check-out</p>
-											<p className="font-medium">Select date</p>
-										</div>
-									</div>
+									<DateRangePicker
+										dateRange={dateRange}
+										onDateRangeChange={setDateRange}
+									/>
 								</div>
 
 								<div>
 									<h3 className="text-sm font-medium mb-1">Guests</h3>
-									<div className="border rounded-md p-2">
-										<p className="font-medium">2 adults, 0 children</p>
-									</div>
+									<GuestSelector
+										adults={adults}
+										// eslint-disable-next-line react/no-children-prop
+										children={children}
+										onGuestsChange={handleGuestsChange}
+										maxOccupancy={selectedRoom?.maxOccupancy || 4}
+									/>
 								</div>
 
 								<Separator />
@@ -681,42 +716,32 @@ export default function HotelDetails() {
 
 								<div className="space-y-2">
 									<div className="flex justify-between">
-										<span>Room price</span>
-										<span className="font-medium">
-											${selectedRoom ? selectedRoom.basePrice : 0}
+										<span>
+											Room price ({nights} {nights === 1 ? "night" : "nights"})
 										</span>
+										<span className="font-medium">${roomPrice.toFixed(2)}</span>
 									</div>
 									<div className="flex justify-between">
 										<span>Taxes & fees ({hotel.pricing.taxRate * 100}%)</span>
-										<span className="font-medium">
-											$
-											{selectedRoom
-												? (
-														selectedRoom.basePrice * hotel.pricing.taxRate
-												  ).toFixed(2)
-												: 0}
-										</span>
+										<span className="font-medium">${taxAmount.toFixed(2)}</span>
 									</div>
 									<Separator />
 									<div className="flex justify-between font-bold">
 										<span>Total</span>
-										<span>
-											$
-											{selectedRoom
-												? (
-														selectedRoom.basePrice *
-														(1 + hotel.pricing.taxRate)
-												  ).toFixed(2)
-												: 0}
-										</span>
+										<span>${totalPrice.toFixed(2)}</span>
 									</div>
 								</div>
 
 								<Button
 									className="w-full"
 									size="lg"
-									disabled={!selectedRoom}
-									onClick={handleBooking}
+									disabled={
+										!selectedRoom ||
+										!dateRange?.from ||
+										!dateRange?.to ||
+										nights === 0
+									}
+									onClick={handleBookNow}
 								>
 									Book Now
 								</Button>
