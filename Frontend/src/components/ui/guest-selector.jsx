@@ -11,7 +11,7 @@ export function GuestSelector({
 	adults,
 	children,
 	onGuestsChange,
-	maxOccupancy = 4,
+	maxOccupancy,
 }) {
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -49,7 +49,9 @@ export function GuestSelector({
 					<div className="space-y-2">
 						<h4 className="font-medium leading-none">Guests</h4>
 						<p className="text-sm text-muted-foreground">
-							Maximum occupancy: {maxOccupancy} guests
+							{maxOccupancy
+								? `Maximum occupancy: ${maxOccupancy} guests`
+								: "Please select a room to change maximum occupancy"}
 						</p>
 					</div>
 					<div className="grid gap-2">
@@ -64,7 +66,7 @@ export function GuestSelector({
 									size="icon"
 									className="h-8 w-8 rounded-full"
 									onClick={() => handleAdultsChange(-1)}
-									disabled={adults <= 1}
+									disabled={adults <= 1 || !maxOccupancy}
 								>
 									-
 								</Button>
@@ -74,7 +76,7 @@ export function GuestSelector({
 									size="icon"
 									className="h-8 w-8 rounded-full"
 									onClick={() => handleAdultsChange(1)}
-									disabled={isAtMaxCapacity}
+									disabled={isAtMaxCapacity || !maxOccupancy}
 								>
 									+
 								</Button>
@@ -91,7 +93,7 @@ export function GuestSelector({
 									size="icon"
 									className="h-8 w-8 rounded-full"
 									onClick={() => handleChildrenChange(-1)}
-									disabled={children <= 0}
+									disabled={children <= 0 || !maxOccupancy}
 								>
 									-
 								</Button>
@@ -101,7 +103,7 @@ export function GuestSelector({
 									size="icon"
 									className="h-8 w-8 rounded-full"
 									onClick={() => handleChildrenChange(1)}
-									disabled={isAtMaxCapacity}
+									disabled={isAtMaxCapacity || !maxOccupancy}
 								>
 									+
 								</Button>

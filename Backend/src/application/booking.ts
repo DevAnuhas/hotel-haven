@@ -1,4 +1,3 @@
-import { Document } from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import { CreateBookingDTO } from "../domain/dtos/booking";
 import Booking from "../infrastructure/schemas/Booking";
@@ -6,8 +5,8 @@ import AuthenticatedRequest from "../types/authenticated-request";
 import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import UnauthorizedError from "../domain/errors/unauthorized-error";
+import { transformBookingData } from "../utils/transformBookingData";
 
-// Create a new booking
 export const createBooking = async (
 	req: AuthenticatedRequest,
 	res: Response,
@@ -26,14 +25,14 @@ export const createBooking = async (
 		}
 
 		// Add the booking
-		await Booking.create({
+		const createdBooking = await Booking.create({
 			...booking.data,
 			userId: userId,
 		});
 
-		// Return the response
 		res.status(201).json({
 			message: "Booking created successfully!",
+			bookingId: createdBooking._id,
 		});
 		return;
 	} catch (error) {
@@ -41,100 +40,49 @@ export const createBooking = async (
 	}
 };
 
-// Utility function to generate booking ID
-const generateBookingId = (booking: any) => {
-	const { _id, checkInDate, hotel } = booking;
-	const hotelCode = hotel.name.slice(0, 3).toUpperCase();
-	const date = new Date(checkInDate);
-	const dateStr = date.toISOString().slice(2, 10).replace(/-/g, "");
-	const counter = parseInt(_id.toString().substring(20, 24), 16);
-	return `${hotelCode}${dateStr}-${counter}`;
-};
+export const getBookingById = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<void> => {
+	try {
+		const bookingId = req.params.bookingId;
+		const bookings = await Booking.find({ _id: bookingId })
+			.populate(
+				"hotelId",
+				"name location rooms images.main policies starRating"
+			)
+			.sort({ createdAt: -1 })
+			.lean();
 
-// Utility function to calculate total price of a booking
-const calculateTotalPrice = (booking: any) => {
-	const pricePerNight = booking.price || 0;
+		if (!bookings.length) {
+			res.status(404).json({ message: "Booking not found" });
+		}
 
-	// TODO: Add logic to handle different room types
-
-	const checkIn = new Date(booking.checkInDate);
-	const checkOut = new Date(booking.checkOutDate);
-	const timeDiff = checkOut.getTime() - checkIn.getTime();
-	const nights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-	const basePrice = pricePerNight * nights;
-
-	const taxRate = 0.1; // 10% tax
-	const tax = basePrice * taxRate;
-	const serviceFee = 15;
-
-	const totalPrice = basePrice + tax + serviceFee;
-
-	return {
-		nights,
-		pricePerNight,
-		basePrice,
-		tax,
-		serviceFee,
-		totalPrice: Number(totalPrice.toFixed(2)),
-	};
-};
-
-// Utility function to transform booking data response
-export const transformBookingData = (bookings: any) => {
-	return Promise.all(
-		bookings.map((el: any) => {
-			return {
-				_id: el._id,
-				bookingId: generateBookingId({
-					_id: el._id,
-					hotel: el.hotelId,
-					checkInDate: el.checkInDate,
-				}),
-				pricing: calculateTotalPrice({
-					price: el.hotelId.price,
-					checkInDate: el.checkInDate,
-					checkOutDate: el.checkOutDate,
-				}),
-				user: {
-					_id: el.userId,
-					firstName: el.firstName,
-					lastName: el.lastName,
-					email: el.email,
-					phone: el.phone,
-				},
-				hotel: el.hotelId,
-				checkInDate: el.checkInDate,
-				checkOutDate: el.checkOutDate,
-				roomType: el.roomType,
-				adults: el.adults,
-				children: el.children,
-				specialRequests: el.specialRequests,
-				status: el.status,
-				createdAt: el.createdAt,
-				updatedAt: el.updatedAt,
-			};
-		})
-	);
+		const bookingsWithAllData = await transformBookingData(bookings);
+		res.status(200).json(bookingsWithAllData[0]);
+	} catch (error) {
+		next(error);
+	}
 };
 
 export const getAllBookings = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
-	const bookings = await Booking.find();
-
-	if (!bookings) {
-		throw new NotFoundError("No bookings found");
-	}
-
+): Promise<void> => {
 	try {
 		const bookings = await Booking.find()
-			.populate("hotelId", "name location price image")
+			.populate("hotelId", "name location rooms images.main")
+			.sort({ createdAt: -1 })
 			.lean();
+
+		if (!bookings.length) {
+			res.status(404).json({ message: "Booking not found" });
+		}
+
 		const bookingsWithAllData = await transformBookingData(bookings);
 		res.status(200).json(bookingsWithAllData);
-		return;
 	} catch (error) {
 		next(error);
 	}
@@ -144,7 +92,7 @@ export const getBookingsForHotel = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const hotelId = req.params.hotelId;
 		const bookings = await Booking.find({ hotelId: hotelId })
@@ -162,16 +110,19 @@ export const getBookingsForUser = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const userId = req.params.userId;
 		const bookings = await Booking.find({ userId: userId })
-			.populate("hotelId", "name location price image")
+			.populate("hotelId", "name location rooms images.main")
 			.sort({ createdAt: -1 })
 			.lean();
+		if (!bookings.length) {
+			res.status(404).json({ message: "Booking not found" });
+		}
+
 		const bookingsWithAllData = await transformBookingData(bookings);
 		res.status(200).json(bookingsWithAllData);
-		return;
 	} catch (error) {
 		next(error);
 	}
@@ -181,7 +132,7 @@ export const updateBooking = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const bookingId = req.params.bookingId;
 		const booking = await Booking.findById(bookingId);
@@ -190,9 +141,7 @@ export const updateBooking = async (
 			throw new NotFoundError("Booking not found");
 		}
 
-		// TODO: Update booking
-		// const updatedHotel = UpdateHotelDTO.safeParse(req.body);
-		// await Booking.findByIdAndUpdate(bookingId, updatedHotel.data);
+		// TODO: Implement update booking logic
 
 		res.status(200).json({
 			message: "Booking updated successfully!",
@@ -207,7 +156,7 @@ export const cancelBooking = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const bookingId = req.params.bookingId;
 		const booking = await Booking.findById(bookingId);
@@ -231,7 +180,7 @@ export const archiveBooking = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const bookingId = req.params.bookingId;
 		const booking = await Booking.findById(bookingId);

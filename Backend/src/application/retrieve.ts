@@ -8,7 +8,7 @@ export const retrieveHotels = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const { query, limit = "6", threshold = "0.92" } = req.query;
 
@@ -23,7 +23,7 @@ export const retrieveHotels = async (
 				hotel,
 				matchScore: 1.0, // Full match for no-query case
 			}));
-			return res.status(200).json(results);
+			res.status(200).json(results);
 		}
 
 		// Initialize OpenAI Embeddings

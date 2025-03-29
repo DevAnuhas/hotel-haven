@@ -685,7 +685,7 @@ export default function HotelDetails() {
 										// eslint-disable-next-line react/no-children-prop
 										children={children}
 										onGuestsChange={handleGuestsChange}
-										maxOccupancy={selectedRoom?.maxOccupancy || 4}
+										maxOccupancy={selectedRoom?.maxOccupancy}
 									/>
 								</div>
 
@@ -745,10 +745,6 @@ export default function HotelDetails() {
 								>
 									Book Now
 								</Button>
-
-								<p className="text-xs text-muted-foreground text-center">
-									You won&apos;t be charged yet
-								</p>
 							</div>
 						</CardContent>
 					</Card>
