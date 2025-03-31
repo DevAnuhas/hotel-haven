@@ -14,6 +14,7 @@ export const api = createApi({
 			return headers;
 		},
 	}),
+	tagTypes: ["Bookings", "Booking"], // Define tag types for cache invalidation
 	endpoints: (builder) => ({
 		getHotels: builder.query({
 			query: () => `hotels`,
@@ -23,24 +24,39 @@ export const api = createApi({
 		}),
 		getBookingById: builder.query({
 			query: (id) => `bookings/${id}`,
+			providesTags: (result, error, id) => [{ type: "Booking", id }],
 		}),
 		getBookingsForUser: builder.query({
 			query: (id) => `bookings/user/${id}`,
-			providesTags: () => [{ type: "Bookings", id: "LIST" }],
+			providesTags: (result) =>
+				result
+					? [
+							...result.map(({ id }) => ({ type: "Booking", id })),
+							{ type: "Bookings", id: "LIST" },
+					  ]
+					: [{ type: "Bookings", id: "LIST" }],
 		}),
 		cancelBooking: builder.mutation({
-			query: (id) => ({
+			query: ({ id, reason }) => ({
 				url: `bookings/${id}`,
-				method: "DELETE",
+				method: "PATCH",
+				body: { status: "cancelled", cancellationReason: reason },
 			}),
-			invalidatesTags: () => [{ type: "Bookings", id: "LIST" }],
+			invalidatesTags: (result, error, { id }) => [
+				{ type: "Booking", id },
+				{ type: "Bookings", id: "LIST" },
+			],
 		}),
 		archiveBooking: builder.mutation({
 			query: (id) => ({
 				url: `bookings/${id}`,
 				method: "PUT",
+				body: { status: "archived" },
 			}),
-			invalidatesTags: () => [{ type: "Bookings", id: "LIST" }],
+			invalidatesTags: (result, error, id) => [
+				{ type: "Booking", id },
+				{ type: "Bookings", id: "LIST" },
+			],
 		}),
 		createHotel: builder.mutation({
 			query: (hotel) => ({
@@ -60,6 +76,13 @@ export const api = createApi({
 			query: (query) =>
 				`hotels/search/retrieve?query=${encodeURIComponent(query)}`,
 		}),
+		createReview: builder.mutation({
+			query: (review) => ({
+				url: `reviews`,
+				method: "POST",
+				body: review,
+			}),
+		}),
 	}),
 });
 
@@ -73,4 +96,5 @@ export const {
 	useCreateHotelMutation,
 	useCreateBookingMutation,
 	useSearchHotelsQuery,
+	useCreateReviewMutation,
 } = api;

@@ -6,6 +6,7 @@ import connectDB from "./infrastructure/db";
 
 import hotelRouter from "./api/hotel";
 import bookingRouter from "./api/booking";
+import reviewRouter from "./api/review";
 
 import globalErrorHandlingMiddleware from "./api/middlewares/global-error-handling-middleware";
 
@@ -35,6 +36,7 @@ app.get("/", (req, res) => {
 // Define the API routes
 app.use("/api/hotels", hotelRouter);
 app.use("/api/bookings", bookingRouter);
+app.use("/api/reviews", reviewRouter);
 
 // Middleware to handle errors
 app.use(globalErrorHandlingMiddleware);

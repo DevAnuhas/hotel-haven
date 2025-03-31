@@ -29,6 +29,7 @@ export const transformBookingData = (bookings: any) => {
 					policies: booking.hotelId?.policies,
 					room: {
 						name: selectedRoom.name,
+						bedCount: selectedRoom.bedCount,
 						bedType: selectedRoom.bedType,
 						maxOccupancy: selectedRoom.maxOccupancy,
 						amenities: selectedRoom.amenities,
@@ -42,6 +43,8 @@ export const transformBookingData = (bookings: any) => {
 				tax: booking.tax,
 				specialRequests: booking.specialRequests,
 				status: booking.status,
+				refundAmount: booking?.refundAmount,
+				reviewId: booking?.reviewId,
 				createdAt: booking.createdAt,
 				updatedAt: booking.updatedAt,
 			};

@@ -34,7 +34,7 @@ import {
 	Leaf,
 } from "lucide-react";
 
-export default function HotelDetails() {
+export default function HotelDetailsPage() {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { data: hotel, isLoading, isError, error } = useGetHotelByIdQuery(id);

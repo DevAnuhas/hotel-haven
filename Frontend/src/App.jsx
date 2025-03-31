@@ -11,11 +11,12 @@ import HomePage from "./pages/home.page";
 import SignInPage from "./pages/sign-in.page";
 import SignUpPage from "./pages/sign-up.page";
 import HotelsPage from "./pages/hotels.page";
-import HotelDetails from "./pages/hotel-details.page";
+import HotelDetailsPage from "./pages/hotel-details.page";
 import CreateHotelPage from "./pages/create-hotel.page";
 import AccountPage from "./pages/account.page";
 import BookingPage from "./pages/booking.page";
 import BookingConfirmation from "./components/BookingConfirmation";
+import BookingDetailsPage from "./pages/booking-details.page";
 
 function App() {
 	return (
@@ -31,9 +32,13 @@ function App() {
 					<Route element={<MainLayout />}>
 						<Route path="/" element={<HomePage />} />
 						<Route path="/hotels" element={<HotelsPage />} />
-						<Route path="/hotel/:id" element={<HotelDetails />} />
+						<Route path="/hotel/:id" element={<HotelDetailsPage />} />
 						<Route element={<ProtectedLayout />}>
 							<Route path="/account" element={<AccountPage />} />
+							<Route
+								path="/account/booking-details/:id"
+								element={<BookingDetailsPage />}
+							/>
 						</Route>
 						<Route element={<AdminProtectedLayout />}>
 							<Route path="/create-hotel" element={<CreateHotelPage />} />
