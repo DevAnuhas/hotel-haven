@@ -6,6 +6,7 @@ import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import UnauthorizedError from "../domain/errors/unauthorized-error";
 import { transformBookingData } from "../utils/transformBookingData";
+import { calculateRefundAmount } from "../utils/calculateRefundAmount";
 
 export const createBooking = async (
 	req: AuthenticatedRequest,
@@ -52,6 +53,7 @@ export const getBookingById = async (
 				"hotelId",
 				"name location rooms images.main policies starRating"
 			)
+			.populate("reviewId")
 			.sort({ createdAt: -1 })
 			.lean();
 
@@ -73,12 +75,15 @@ export const getAllBookings = async (
 ): Promise<void> => {
 	try {
 		const bookings = await Booking.find()
-			.populate("hotelId", "name location rooms images.main")
+			.populate(
+				"hotelId",
+				"name location rooms images.main policies starRating"
+			)
 			.sort({ createdAt: -1 })
 			.lean();
 
-		if (!bookings.length) {
-			res.status(404).json({ message: "Booking not found" });
+		if (!bookings) {
+			throw new NotFoundError("Booking not found");
 		}
 
 		const bookingsWithAllData = await transformBookingData(bookings);
@@ -96,8 +101,16 @@ export const getBookingsForHotel = async (
 	try {
 		const hotelId = req.params.hotelId;
 		const bookings = await Booking.find({ hotelId: hotelId })
-			.populate("hotelId", "name location price image")
+			.populate(
+				"hotelId",
+				"name location rooms images.main policies starRating"
+			)
 			.lean();
+
+		if (!bookings) {
+			throw new NotFoundError("Booking not found");
+		}
+
 		const bookingsWithAllData = await transformBookingData(bookings);
 		res.status(200).json(bookingsWithAllData);
 		return;
@@ -114,11 +127,15 @@ export const getBookingsForUser = async (
 	try {
 		const userId = req.params.userId;
 		const bookings = await Booking.find({ userId: userId })
-			.populate("hotelId", "name location rooms images.main")
+			.populate(
+				"hotelId",
+				"name location rooms images.main policies starRating"
+			)
 			.sort({ createdAt: -1 })
 			.lean();
-		if (!bookings.length) {
-			res.status(404).json({ message: "Booking not found" });
+
+		if (!bookings) {
+			throw new NotFoundError("Booking not found");
 		}
 
 		const bookingsWithAllData = await transformBookingData(bookings);
@@ -159,18 +176,43 @@ export const cancelBooking = async (
 ): Promise<void> => {
 	try {
 		const bookingId = req.params.bookingId;
-		const booking = await Booking.findById(bookingId);
+		const { cancellationReason } = req.body;
 
+		// TODO: Implement DTO for cancellation
+
+		// Calculate the refund amount
+		const refundAmount = await calculateRefundAmount(bookingId);
+
+		// Validate cancellationReason
+		if (
+			cancellationReason &&
+			(typeof cancellationReason !== "string" ||
+				cancellationReason.length > 200)
+		) {
+			throw new ValidationError(
+				"Cancellation reason must be a string under 200 characters"
+			);
+		}
+
+		const booking = await Booking.findById(bookingId);
 		if (!booking) {
 			throw new NotFoundError("Booking not found");
 		}
 
-		await Booking.findByIdAndUpdate(bookingId, { status: "cancelled" });
+		const updatedBooking = await Booking.findByIdAndUpdate(
+			bookingId,
+			{
+				status: "cancelled",
+				cancellationReason: cancellationReason || "Not specified",
+				refundAmount: refundAmount,
+			},
+			{ new: true, runValidators: true }
+		);
 
 		res.status(200).json({
 			message: "Booking cancelled successfully!",
+			booking: updatedBooking,
 		});
-		return;
 	} catch (error) {
 		next(error);
 	}
@@ -183,18 +225,24 @@ export const archiveBooking = async (
 ): Promise<void> => {
 	try {
 		const bookingId = req.params.bookingId;
-		const booking = await Booking.findById(bookingId);
 
+		// Check if booking exists
+		const booking = await Booking.findById(bookingId);
 		if (!booking) {
 			throw new NotFoundError("Booking not found");
 		}
 
-		await Booking.findByIdAndUpdate(bookingId, { status: "archived" });
+		// Update booking status
+		const updatedBooking = await Booking.findByIdAndUpdate(
+			bookingId,
+			{ status: "archived" },
+			{ new: true, runValidators: true }
+		);
 
 		res.status(200).json({
 			message: "Booking archived successfully!",
+			booking: updatedBooking,
 		});
-		return;
 	} catch (error) {
 		next(error);
 	}

@@ -61,6 +61,7 @@ const HotelSchema = new Schema(
 			gallery: [String],
 		},
 		rating: {
+			// TODO: Refactor to use Review schema
 			average: {
 				type: Number,
 				min: 0,
@@ -85,7 +86,6 @@ const HotelSchema = new Schema(
 				valueForMoney: { type: Number, default: 0 },
 			},
 		},
-		reviews: [ReviewSchema],
 		pricing: {
 			currency: {
 				type: String,

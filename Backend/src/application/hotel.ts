@@ -1,4 +1,5 @@
 import Hotel from "../infrastructure/schemas/Hotel";
+import Review from "../infrastructure/schemas/Review";
 import mongoose from "mongoose";
 import { Request, Response, NextFunction } from "express";
 import NotFoundError from "../domain/errors/not-found-error";
@@ -34,13 +35,23 @@ export const getHotelById = async (
 		if (!mongoose.Types.ObjectId.isValid(hotelId)) {
 			throw new NotFoundError("Hotel not found");
 		}
-		const hotel = await Hotel.findById(hotelId);
 
+		// Fetch the hotel
+		const hotel = await Hotel.findById(hotelId).lean();
 		if (!hotel) {
 			throw new NotFoundError("Hotel not found");
 		}
 
-		res.status(200).json(hotel);
+		// Fetch the reviews for this hotel
+		const reviews = await Review.find({ hotelId }).lean();
+
+		// Combine hotel data with reviews
+		const hotelWithReviews = {
+			...hotel,
+			reviews,
+		};
+
+		res.status(200).json(hotelWithReviews);
 	} catch (error) {
 		next(error);
 	}
