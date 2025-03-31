@@ -8,8 +8,7 @@ const bookingSchema = new mongoose.Schema(
 			required: true,
 		},
 		roomId: {
-			type: Number,
-			ref: "Room",
+			type: Number, // TODO: Refactor to use mongoose.Types.ObjectId
 			required: true,
 		},
 		userId: {
@@ -59,10 +58,23 @@ const bookingSchema = new mongoose.Schema(
 		specialRequests: {
 			type: String,
 		},
+		cancellationReason: {
+			type: String,
+			default: null,
+		},
+		refundAmount: {
+			type: Number,
+			default: null,
+		},
 		status: {
 			type: String,
 			enum: ["pending", "confirmed", "completed", "cancelled", "archived"],
 			default: "pending",
+		},
+		reviewId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Review",
+			default: null,
 		},
 	},
 	{ timestamps: true }

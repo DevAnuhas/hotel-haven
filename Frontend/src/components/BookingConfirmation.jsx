@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle2, StarIcon } from "lucide-react";
+import BeatLoader from "react-spinners/BeatLoader";
 import { useGetBookingByIdQuery } from "@/lib/api";
 
 export default function BookingConfirmation() {
@@ -27,8 +28,19 @@ export default function BookingConfirmation() {
 
 	if (isLoading) {
 		return (
+			<div className="container mx-auto py-10 h-screen flex items-center justify-center text-center">
+				<BeatLoader loading size={20} />
+			</div>
+		);
+	}
+
+	if (isError) {
+		return (
 			<div className="container mx-auto py-10 text-center">
-				<h1 className="text-2xl font-bold mb-4">Loading...</h1>
+				<h1 className="text-2xl font-bold mb-4">
+					Error Loading Booking Information
+				</h1>
+				<p className="mb-6">{error.message || "An error occurred."}</p>
 			</div>
 		);
 	}
@@ -42,17 +54,6 @@ export default function BookingConfirmation() {
 				<Link to="/">
 					<Button>Return to Home</Button>
 				</Link>
-			</div>
-		);
-	}
-
-	if (isError) {
-		return (
-			<div className="container mx-auto py-10 text-center">
-				<h1 className="text-2xl font-bold mb-4">
-					Error Loading Booking Information
-				</h1>
-				<p className="mb-6">{error.message || "An error occurred."}</p>
 			</div>
 		);
 	}
