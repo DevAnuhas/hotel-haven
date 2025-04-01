@@ -9,6 +9,7 @@ import {
 	SignedOut,
 	useUser,
 } from "@clerk/clerk-react";
+import { CircleUser } from "lucide-react";
 
 function Navigation() {
 	const { user } = useUser();
@@ -50,7 +51,10 @@ function Navigation() {
 				<SignedIn>
 					<UserButton />
 					<Button asChild>
-						<Link to="/account">My Account</Link>
+						<Link to="/account">
+							<CircleUser />
+							My Account
+						</Link>
 					</Button>
 				</SignedIn>
 			</nav>

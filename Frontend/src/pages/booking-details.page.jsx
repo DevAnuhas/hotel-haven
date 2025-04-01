@@ -10,37 +10,35 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import {
-	StarIcon,
-	ArrowLeft,
-	CalendarIcon,
-	MapPinIcon,
-	CheckCircle,
-	XCircle,
-	ArchiveIcon,
-	Clock,
-	CreditCard,
-	MessageSquareMore,
-} from "lucide-react";
+import { ArrowLeft, StarIcon, CalendarIcon, MapPinIcon } from "lucide-react";
 import BeatLoader from "react-spinners/BeatLoader";
-import { useGetBookingByIdQuery } from "@/lib/api";
+import {
+	useGetBookingByIdQuery,
+	useCancelBookingMutation,
+	useArchiveBookingMutation,
+	useCreateReviewMutation,
+} from "@/lib/api";
+import { cancelBookingUtil, archiveBookingUtil } from "@/utils/bookingUtils";
+import BookingStatus from "@/components/BookingStatus";
+import BookingActions from "@/components/BookingActions";
+import CancelBookingDialog from "@/components/CancelBookingDialog";
+import ReviewDialog from "@/components/ReviewDialog";
+import CancellationPolicy from "@/components/CancellationPolicy";
+import { toast } from "sonner";
 
 export default function BookingDetailsPage() {
 	const { id } = useParams();
 	const [isCancelDialogOpen, setIsCancelDialogOpen] = useState(false);
+	const [isReviewDialogOpen, setIsReviewDialogOpen] = useState(false);
 	const [cancellationReason, setCancellationReason] = useState("");
+	const [rating, setRating] = useState(10);
+	const [reviewTitle, setReviewTitle] = useState("");
+	const [reviewComment, setReviewComment] = useState("");
 
 	const { data: booking, isLoading, isError } = useGetBookingByIdQuery(id);
+	const [cancelBooking] = useCancelBookingMutation();
+	const [archiveBooking] = useArchiveBookingMutation();
+	const [createReview] = useCreateReviewMutation();
 
 	if (isLoading) {
 		return (
@@ -66,40 +64,54 @@ export default function BookingDetailsPage() {
 		);
 	}
 
-	// Generate star rating display
 	const stars = Array(booking.hotel?.starRating || 0).fill(0);
-
-	// Calculate nights
 	const nights = Math.round(
 		(new Date(booking.checkOutDate).getTime() -
 			new Date(booking.checkInDate).getTime()) /
 			(1000 * 60 * 60 * 24)
 	);
 
-	// Handle booking cancellation
-	const handleCancelBooking = () => {
-		// TODO
-	};
-
-	// Handle booking archiving
-	const handleArchiveBooking = () => {
-		// TODO
-	};
-
-	// Get status icon
-	const getStatusIcon = (status) => {
-		switch (status) {
-			case "pending":
-				return <Clock className="h-5 w-5 text-yellow-500" />;
-			case "confirmed":
-				return <CheckCircle className="h-5 w-5 text-green-500" />;
-			case "completed":
-				return <CheckCircle className="h-5 w-5 text-blue-500" />;
-			case "cancelled":
-				return <XCircle className="h-5 w-5 text-red-500" />;
-			case "archived":
-				return <ArchiveIcon className="h-5 w-5 text-gray-500" />;
+	const handleCancelBooking = async () => {
+		try {
+			await cancelBookingUtil(cancelBooking, id, cancellationReason);
+			toast.success("Booking cancelled successfully!");
+			setIsCancelDialogOpen(false);
+			setCancellationReason("");
+		} catch {
+			toast.error("Unable to cancel booking");
 		}
+	};
+
+	const handleArchiveBooking = async () => {
+		try {
+			await archiveBookingUtil(archiveBooking, id);
+			toast.success("Booking archived successfully!");
+		} catch {
+			toast.error("Unable to archive booking");
+		}
+	};
+
+	const handleSubmitReview = async () => {
+		try {
+			await createReview({
+				hotelId: booking?.hotel?._id,
+				bookingId: id,
+				rating,
+				title: reviewTitle,
+				comment: reviewComment,
+			}).unwrap();
+			toast.success("Review submitted successfully!");
+			setIsReviewDialogOpen(false);
+			setReviewComment("");
+			setReviewTitle("");
+		} catch {
+			toast.error("Unable to submit review");
+		}
+	};
+
+	const handlePayNow = () => {
+		// Placeholder for payment logic (not provided in AccountPage, so left as a TODO)
+		toast.info("Payment functionality not yet implemented.");
 	};
 
 	return (
@@ -116,29 +128,14 @@ export default function BookingDetailsPage() {
 
 			<Card className="mb-6">
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<div className="flex items-center gap-2">
-						<div>
-							<CardTitle>Booking Reference</CardTitle>
-							<CardDescription>{booking.id}</CardDescription>
-						</div>
+					<div>
+						<CardTitle>Booking Reference</CardTitle>
+						<CardDescription>{booking.id}</CardDescription>
 					</div>
-					<div className="flex items-center gap-2">
-						{getStatusIcon(booking.status)}
-						<div className="text-sm">
-							<p className="font-medium">
-								{booking.status === "pending" && "Awaiting payment"}
-								{booking.status === "confirmed" && "Booking confirmed"}
-								{booking.status === "completed" && "Stay completed"}
-								{booking.status === "cancelled" && "Booking cancelled"}
-								{booking.status === "archived" && "Booking archived"}
-							</p>
-							<p className="text-muted-foreground">
-								{booking.status === "cancelled" &&
-									booking.refundAmount &&
-									`Refunded: $${booking.refundAmount.toFixed(2)}`}
-							</p>
-						</div>
-					</div>
+					<BookingStatus
+						status={booking.status}
+						refundAmount={booking.refundAmount}
+					/>
 				</CardHeader>
 				<CardContent className="pt-6">
 					<div className="flex flex-col md:flex-row gap-6 items-start">
@@ -168,7 +165,6 @@ export default function BookingDetailsPage() {
 									{booking.hotel?.location.country}
 								</span>
 							</div>
-
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								<div className="flex items-center gap-2">
 									<CalendarIcon className="h-4 w-4 text-muted-foreground" />
@@ -231,7 +227,6 @@ export default function BookingDetailsPage() {
 								</div>
 							</div>
 						</div>
-
 						<div>
 							<h3 className="text-sm font-medium mb-2">
 								Check-out Information
@@ -249,7 +244,6 @@ export default function BookingDetailsPage() {
 								</div>
 							</div>
 						</div>
-
 						<div>
 							<h3 className="text-sm font-medium mb-2">Room Information</h3>
 							<div className="text-sm space-y-1">
@@ -270,7 +264,6 @@ export default function BookingDetailsPage() {
 								</div>
 							</div>
 						</div>
-
 						{booking.specialRequests && (
 							<div>
 								<h3 className="text-sm font-medium mb-2">Special Requests</h3>
@@ -307,7 +300,6 @@ export default function BookingDetailsPage() {
 								</div>
 							</div>
 						</div>
-
 						{booking.status === "cancelled" && booking.refundAmount && (
 							<div>
 								<h3 className="text-sm font-medium mb-2">Refund Information</h3>
@@ -331,108 +323,46 @@ export default function BookingDetailsPage() {
 								</div>
 							</div>
 						)}
-
 						<div>
 							<h3 className="text-sm font-medium mb-2">Cancellation Policy</h3>
-							<p className="text-sm p-3 bg-muted rounded-md">
-								{/* TODO: Cancellation policy */}
-							</p>
+							<div className="text-sm p-3 bg-muted rounded-md">
+								<CancellationPolicy selectedBooking={booking} />
+							</div>
 						</div>
 					</CardContent>
 				</Card>
 			</div>
 
-			<div className="flex flex-wrap gap-2 justify-end">
-				{booking.status === "completed" || booking.status === "cancelled" ? (
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={() => handleArchiveBooking(booking._id)}
-					>
-						Archive Booking
-					</Button>
-				) : (
-					(booking.status === "pending" || booking.status === "confirmed") && (
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => {
-								// setSelectedBookingId(booking._id);
-								setIsCancelDialogOpen(true);
-							}}
-						>
-							Cancel Booking
-						</Button>
-					)
-				)}
+			<BookingActions
+				booking={booking}
+				onCancel={() => setIsCancelDialogOpen(true)}
+				onArchive={handleArchiveBooking}
+				onReview={() => setIsReviewDialogOpen(true)}
+				onPay={handlePayNow}
+				hideViewDetails={true}
+			/>
 
-				{booking.status === "pending" && (
-					<Button
-						size="sm"
-						onClick={() => {
-							// setSelectedBookingId(booking._id);
-							// TODO: Implement payment for pending bookings
-						}}
-					>
-						<CreditCard className="mr-1" />
-						Pay Now
-					</Button>
-				)}
+			<CancelBookingDialog
+				isOpen={isCancelDialogOpen}
+				onOpenChange={setIsCancelDialogOpen}
+				selectedBooking={booking}
+				cancellationReason={cancellationReason}
+				setCancellationReason={setCancellationReason}
+				onCancel={handleCancelBooking}
+			/>
 
-				{booking.status === "completed" && (
-					<Button
-						size="sm"
-						onClick={() => {
-							// setSelectedBookingId(booking._id);
-							// setIsReviewDialogOpen(true);
-						}}
-						disabled={booking.reviewId}
-					>
-						<MessageSquareMore className="mr-1" />
-						{!booking.reviewId ? "Leave Review" : "Review Submitted"}
-					</Button>
-				)}
-			</div>
-
-			{/* Cancel Booking Dialog */}
-			<Dialog open={isCancelDialogOpen} onOpenChange={setIsCancelDialogOpen}>
-				<DialogContent className="sm:max-w-[500px]">
-					<DialogHeader>
-						<DialogTitle>Cancel Booking</DialogTitle>
-						<DialogDescription>
-							Are you sure you want to cancel your booking at{" "}
-							{booking.hotel?.name}?
-						</DialogDescription>
-					</DialogHeader>
-					<div className="space-y-4 py-4">
-						<div className="bg-muted p-3 rounded-md text-sm">
-							<h4 className="font-medium mb-1">Cancellation Policy</h4>
-							{/* TODO: Cancellation policy */}
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="reason">Reason for Cancellation (Optional)</Label>
-							<Textarea
-								id="reason"
-								placeholder="Please let us know why you're cancelling..."
-								className="min-h-[100px]"
-								value={cancellationReason}
-								onChange={(e) => setCancellationReason(e.target.value)}
-							/>
-						</div>
-					</div>
-					<DialogFooter>
-						<Button
-							variant="outline"
-							onClick={() => setIsCancelDialogOpen(false)}
-						>
-							Keep Booking
-						</Button>
-						<Button variant="destructive" onClick={handleCancelBooking}>
-							Cancel Booking
-						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
+			<ReviewDialog
+				isOpen={isReviewDialogOpen}
+				onOpenChange={setIsReviewDialogOpen}
+				selectedBooking={booking}
+				rating={rating}
+				setRating={setRating}
+				reviewTitle={reviewTitle}
+				setReviewTitle={setReviewTitle}
+				reviewComment={reviewComment}
+				setReviewComment={setReviewComment}
+				onSubmit={handleSubmitReview}
+			/>
 		</div>
 	);
 }
