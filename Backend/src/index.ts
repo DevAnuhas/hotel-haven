@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
-import connectDB from "./infrastructure/db";
+import connectDB from "./infrastructure/db/connect";
 
 import hotelRouter from "./api/hotel";
 import bookingRouter from "./api/booking";

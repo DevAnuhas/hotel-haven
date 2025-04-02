@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 import { RoomSchema } from "./Room";
-import { ReviewSchema } from "./Review";
 
 const HotelSchema = new Schema(
 	{
