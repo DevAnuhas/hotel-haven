@@ -240,7 +240,7 @@ export default function HotelDetailsPage() {
 						</div>
 
 						<div className="grid grid-cols-4 gap-2">
-							{hotel.images.gallery.slice(0, 4).map((image, index) => (
+							{hotel.images.gallery?.slice(0, 4).map((image, index) => (
 								<div
 									key={index}
 									className="relative aspect-square overflow-hidden"
