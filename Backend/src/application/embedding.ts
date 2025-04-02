@@ -86,8 +86,6 @@ export const createEmbeddings = async (
 			});
 		});
 
-		console.log(docs);
-
 		await vectorStore.addDocuments(docs);
 
 		res.status(200).json({ message: "Vector store populated successfully." });
