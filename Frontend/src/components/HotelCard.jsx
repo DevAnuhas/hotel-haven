@@ -52,7 +52,7 @@ export function HotelCard({ hotel }) {
 							alt={hotel.name}
 							className="object-cover w-full h-full"
 						/>
-						{hotel.confidence && (
+						{hotel.matchScore && (
 							<Badge className="absolute left-4 top-4">
 								Match Score: {hotel.matchScore.toFixed(2) * 100}%
 							</Badge>

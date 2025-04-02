@@ -55,8 +55,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/297840629.jpg?k=d20e005d5404a7bea91cb5fe624842f72b27867139c5d65700ab7f69396026ce&o=&hp=1",
-			gallery: [],
+			main: "https://www.thetrainline.com/cms/media/9183/france-paris-pullman-hotel-eiffel-tower-room-view.jpg?mode=crop&width=860&height=574&quality=70",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/514701466.jpg?k=75fe4e18ba1d95ea0ac8a0f32f41c3f3dc4e7fef18ce3a1bb7f689f3a85c1ed2&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/20316301.jpg?k=58dd17d1b88b023ec75a1331cb85f020cc8adbbb40719d17d47e32d7d6bea164&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/16858798.jpg?k=bbab413cf1cfe5e57ddba9d22741c76e901ed27754c32f4ce020b3eefe12fa20&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/12657814.jpg?k=21d40d45458d7e3ed419ed7582b7e9c3bf3595e3659410fe2a463e9fec87e199&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.4,
@@ -136,8 +141,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/60307464.jpg?k=67ae35316203e2ec82d8e02e0cef883217cce9c436da581528b94ad6dee8e393&o=&hp=1",
-			gallery: [],
+			main: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/521318898.jpg?k=cf1b7ead00d8271428a6efe6475c1d89e9d610148d6fd01db75e0047e61f91c0&o=&hp=1",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/521168487.jpg?k=72a88b3863fa7f367aab8d076c30cef03eab3406b4864684f15551ddaceabc60&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/521168512.jpg?k=d22aae28b04e30b0bec632adfdb3cda1ec61ca8f332e801a676c1e246dc20921&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/521168643.jpg?k=aca8a4be799e2aa7227026cfa907422cdb7a9c5968752723dda909dc58f83a3d&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/521168647.jpg?k=a4ff254125fbf6cd2f984e62fe5df23391b05a888186d3af7e74989cb9db7303&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.4,
@@ -218,8 +228,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/84555265.jpg?k=ce7c3c699dc591b8fbac1a329b5f57247cfa4d13f809c718069f948a4df78b54&o=&hp=1",
-			gallery: [],
+			main: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/102142679.jpg?k=f215dca3addf46e3619df03d8536c624c5a8b24baf4cd433a52d7f25aab0af16&o=&hp=1",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/335113207.jpg?k=8af4c7bf178eb7a1b1632fe9f7eb166a4e5886286598f2f292ac070c5a4fc580&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/335111274.jpg?k=64d9a5962a34bc89c02483bd0fe9d86d30c50a4993bef0a3b50f5e2e7528da11&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/102142757.jpg?k=c1672629500f04f5750cda25f0d7261caca73fba25b84ea02e459e0023c79958&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/10082830.jpg?k=619a67e89a46fb568563251e85f60cb8e45a39b8df6bfb6691c870879f0f00e3&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.6,
@@ -300,8 +315,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/308794596.jpg?k=76bbd047a4f3773844efb15819a637f10fb98671244760fcd69cf26d1073b797&o=&hp=1",
-			gallery: [],
+			main: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/665305338.jpg?k=52cbf04c1172a2ef9a494dae427a1456542624a067c0e5aa629769c409f2a07a&o=&hp=1",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/665395136.jpg?k=85fedde2cc54168df5d67ad138e60c7ae4e79df2c890e30346572a04d9132dbc&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/665401906.jpg?k=350a5e7c196932ab52f885848fc1e3970248a3a618334144bc6b0f98ec936b65&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/665432961.jpg?k=203b409d50add1fc8b5783d0dda1caa3607f854181ea905a8498b0b5896791bf&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/665433042.jpg?k=2cb519c66ab9f33e80f4f22bcf86029c2a4ac1f64fb4313a50208ed8ee763a1a&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.8,
@@ -382,8 +402,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/606303798.jpg?k=514943d0025704b27396faf82af167468d8b50b98f311668f206f79ca36cb53d&o=&hp=1",
-			gallery: [],
+			main: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/175222138.jpg?k=69ca4b753fac2174156e747b94c13f6e199516eee18340b843961c16a5e54d81&o=&hp=1",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/196336802.jpg?k=f7d82d97dce79b4638fc3462456767f7eba4d2998cf7cc56e307d59f1352c823&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/175097500.jpg?k=2af992fc527e079251d7f0925b8ef379489dc6ca01afadd771287b78d9ac33a4&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/361764606.jpg?k=4cc53f35e7cd55b27167edb8542637784fbb56224ca912bfe8ed60632d3e24b8&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/196336801.jpg?k=e2dbec8795fdcb826884025e7da0a49e9209b1b63de22f7cc25f792eb22f11e0&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.6,
@@ -463,8 +488,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/608273980.jpg?k=c7df20ffb25ae52b6a17037dc13f5e15b94a0fe253a9b9d0b656f6376eabec7d&o=&hp=1",
-			gallery: [],
+			main: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/661404801.jpg?k=bcbf94246d6c8f7e0c558fa8814b9ef6544cab4289c9a4f275bae4be8db8a2ac&o=&hp=1",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/661404632.jpg?k=8c1211d4229c497932d8b3e82a90461a099044d545a9ab4b9201d8b819ed8037&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/661404561.jpg?k=87e8497e87b258ae9e1250e23ba5483f6eb30dc49ef28b3ef1c758e1d5f19577&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/661404806.jpg?k=7cee066b47f902efb42d573f9c85aa0c59d54b815429f6663abcaeaccf6a04fa&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/661404593.jpg?k=488501a75c32e0a2d76e7847c58cff58be363693f3ba532a4b8e088cc24fa136&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.0,
@@ -545,8 +575,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/596257607.jpg?k=0b513d8fca0734c02a83d558cbad7f792ef3ac900fd42c7d783f31ab94b4062c&o=&hp=1",
-			gallery: [],
+			main: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/422597418.jpg?k=7c39e91ab8452394ef7ed8b9aa8d74ab99ac8027f840a8c0aa5fe5638a91e88d&o=&hp=1",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/346358199.jpg?k=fa96ea43d218d678e2e623c82a52b7f27b3760acd332998f01cb3fa1b14625e2&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/346358152.jpg?k=b1800f0cbf8c44218ecdd10a8771f11f2328dcb4d3840d36f18ed8aa8dea54fd&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/657991518.jpg?k=81c1797e4de6b584d0182856155b6ee33e1102a3d96f79f97d20994bcd89422a&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/346358215.jpg?k=7213518252cef1bca0e94b992f226fa9e01b348435884070f2666e9162b8c57f&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.8,
@@ -626,8 +661,13 @@ const hotels = [
 			},
 		],
 		images: {
-			main: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/308797093.jpg?k=3a35a30f15d40ced28afacf4b6ae81ea597a43c90c274194a08738f6e760b596&o=&hp=1",
-			gallery: [],
+			main: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/167451187.jpg?k=4a5e46e6870d9b2742515e5dad19e9f3a78bb87487f9f67ef186e6ef3d1cd81e&o=&hp=1",
+			gallery: [
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/200289810.jpg?k=21aaaf861342b115b33346e6188b3bbbafdbe885da284d14400c428873f347a0&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/217689877.jpg?k=22fd77b686d968a908593862e74b39a233004f2eaaf7f6ab42b705435c151c76&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/246387629.jpg?k=91de4150d388649f9da2e9646854f5dc0134184d6780acb56394ce18fc039503&o=&hp=1",
+				"https://cf.bstatic.com/xdata/images/hotel/max1024x768/246388706.jpg?k=808174bccb8f148239594b49600776843f77a2c7739c5d6b1d2388d80768180a&o=&hp=1",
+			],
 		},
 		rating: {
 			average: 9.2,

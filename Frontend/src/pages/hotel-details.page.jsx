@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { HotelImageCarousel } from "@/components/HotelImageCarousel";
 import {
 	StarIcon,
 	MapPinIcon,
@@ -231,28 +232,11 @@ export default function HotelDetailsPage() {
 							</div>
 						</div>
 
-						<div className="relative aspect-[16/9] overflow-hidden flex justify-center rounded-lg mb-4">
-							<img
-								src={hotel.images.main || "/assets/placeholder.svg"}
-								alt={hotel.name}
-								className="w-full object-cover"
-							/>
-						</div>
-
-						<div className="grid grid-cols-4 gap-2">
-							{hotel.images.gallery?.slice(0, 4).map((image, index) => (
-								<div
-									key={index}
-									className="relative aspect-square overflow-hidden"
-								>
-									<img
-										src={image || "/assets/placeholder.svg"}
-										alt={`${hotel.name} gallery ${index + 1}`}
-										className="h-full object-cover"
-									/>
-								</div>
-							))}
-						</div>
+						<HotelImageCarousel
+							images={[hotel.images.main, ...hotel.images.gallery]}
+							className="mb-4"
+							autoplayDelay={2500}
+						/>
 					</div>
 
 					<Tabs defaultValue="overview">
