@@ -1,6 +1,17 @@
 # Hotel Haven
 
-Hotel Haven is a modern hotel booking application built with React, featuring a clean UI and seamless user experience. It leverages various technologies to provide a robust and scalable solution for hotel booking.
+### License
+
+Copyright &copy; 2025 Anuhas Dissanayake. All Rights Reserved.
+This product is licensed under [MIT License](License.txt).
+
+---
+
+## Introduction
+
+Hotel Haven is a smart hotel booking platform that uses AI-powered search and recommendations to help users find the perfect hotel for their needs. The platform provides a user-friendly interface for browsing hotels, searching for specific locations, and booking rooms with ease.
+
+---
 
 ## Features
 
@@ -11,7 +22,6 @@ Hotel Haven is a modern hotel booking application built with React, featuring a 
 - Location-based hotel search
 - Price filtering and sorting options
 - User authentication and authorization
-- Admin panel for managing hotels
 - Booking functionality
 
 **Deployed URLs**
@@ -19,19 +29,21 @@ Hotel Haven is a modern hotel booking application built with React, featuring a 
 - Frontend: [https://hotel-haven-frontend.vercel.app](https://hotel-haven-frontend.vercel.app)
 - Backend: [https://hotel-haven-api.vercel.app](https://hotel-haven-api.vercel.app)
 
+---
+
 ## Tech Stack
 
 ### Frontend
 
 - **React**: A JavaScript library for building user interfaces.
-- **React Router**: Declarative routing for React applications.
+- **Shadcn UI**: A set of accessible and customizable UI components.
 - **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
-- **Lucide React**: A collection of simple and customizable SVG icons.
-- **Shadcn UI Components**: A set of accessible and customizable UI components.
-- **Redux Toolkit**: A set of tools to simplify Redux development.
+- **Redux**: A predictable state container for JavaScript applications.
+- **React Router**: Declarative routing for React applications.
 - **React Hook Form**: Performant, flexible, and extensible forms with easy-to-use validation.
-- **Zod**: TypeScript-first schema declaration and validation library.
 - **Clerk**: Authentication and user management for React applications.
+- **Zod**: TypeScript-first schema declaration and validation library.
+- **Lucide React**: A collection of simple and customizable SVG icons.
 - **Embla Carousel**: A lightweight carousel library with autoplay functionality.
 - **Sonner**: A toast notification library for React.
 
@@ -44,7 +56,8 @@ Hotel Haven is a modern hotel booking application built with React, featuring a 
 - **OpenAI**: Utilized for AI-powered search and recommendation features.
 - **Clerk**: Authentication and user management for Node.js applications.
 - **Zod**: TypeScript-first schema declaration and validation library.
-- **Dotenv**: A module that loads environment variables from a `.env` file into `process.env`.
+
+---
 
 ## Getting Started
 
@@ -92,23 +105,55 @@ VITE_REACT_APP_BACKEND_URL=http://localhost:3000
 VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 ```
 
+### Initializing the Database
+
+1. Seed the database with sample data and embeddings:
+
+```bash
+cd Backend
+npm run seed
+```
+
+2. Create a Vector Search Index:
+
+- In MongoDB Atlas, go to "Atlas Search" tab and select the `hotelVectors` collection.
+- Create a vector index named `vector_index` with following JSON configuration:
+
+```json
+{
+	"fields": [
+		{
+			"type": "vector",
+			"path": "embedding",
+			"numDimensions": 1536,
+			"similarity": "cosine"
+		}
+	]
+}
+```
+
+- Wait for it to build.
+- Set network access to allow your IP in Atlas under "Network Access."
+
 ### Running the Application
 
-1. Start the backend server:
+1. Start the backend server (Terminal 1):
 
 ```bash
 cd Backend
 npm run dev
 ```
 
-2. Start the frontend development server:
+2. Start the frontend server (Terminal 2):
 
 ```bash
-cd ../Frontend
+cd Frontend
 npm run dev
 ```
 
-3. Open your browser and navigate to `http://localhost:5173` to see the app in action.
+3. Open your browser and navigate to the link displayed in your Terminal 2.
+
+---
 
 ## Project Structure
 
@@ -129,10 +174,14 @@ npm run dev
 - `src/infrastructure`: Contains database connection and schemas.
 - `src/index.ts`: Entry point for the Express application.
 
+---
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
+---
+
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under [MIT License](License.txt).
