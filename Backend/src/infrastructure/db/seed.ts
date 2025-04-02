@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import connectDB from "./connect";
 import Hotel from "../schemas/Hotel";
 import Review from "../schemas/Review";
+import Booking from "../schemas/Booking";
+import { generateEmbeddings } from "../../application/embedding";
+import ora from "ora";
 
 // Hotel data
 const hotels = [
@@ -955,20 +958,33 @@ const reviews = [
 	},
 ];
 
-export default reviews;
-
 const seedDB = async () => {
+	// Connect to database
 	try {
 		await connectDB();
+	} catch (error) {
+		console.error("[ERROR DETAILS]", error);
+		process.exit(1);
+	}
 
-		// Clear existing data
+	// Clear existing data
+	const clearSpinner = ora("Clearing existing data...").start();
+	try {
 		await Hotel.deleteMany({});
 		await Review.deleteMany({});
-		console.log("Existing data removed");
+		await Booking.deleteMany({});
+		clearSpinner.succeed("[SUCCESS] Existing data cleared");
+	} catch (error) {
+		clearSpinner.fail("[ERROR] Failed to clear existing data");
+		console.error("[ERROR DETAILS]", error);
+		process.exit(1);
+	}
 
-		// Insert hotels
+	// Seed hotels
+	const hotelSpinner = ora("Seeding hotels...").start();
+	try {
 		const insertedHotels = await Hotel.insertMany(hotels);
-		console.log("Hotels seeded successfully");
+		hotelSpinner.succeed(`[SUCCESS] Seeded ${insertedHotels.length} hotels`);
 
 		// Map hotel names to their inserted IDs
 		const hotelIdMap = new Map<string, mongoose.Types.ObjectId>();
@@ -1002,21 +1018,45 @@ const seedDB = async () => {
 				throw new Error(`No hotel ID found for review: ${review.title}`);
 			}
 
-			return {
-				...review,
-				hotelId: hotelId,
-			};
+			return { ...review, hotelId };
 		});
 
-		// Insert reviews
-		await Review.insertMany(updatedReviews);
-		console.log("Reviews seeded successfully");
+		// Seed reviews
+		const reviewSpinner = ora("Seeding reviews...").start();
+		try {
+			const insertedReviews = await Review.insertMany(updatedReviews);
+			reviewSpinner.succeed(
+				`[SUCCESS] Seeded ${insertedReviews.length} reviews`
+			);
+		} catch (error) {
+			reviewSpinner.fail("[ERROR] Failed to seed reviews");
+			console.error("[ERROR DETAILS]", error);
+			process.exit(1);
+		}
+
+		// Generate embeddings
+		const embeddingSpinner = ora("Generating hotel embeddings...").start();
+		try {
+			await generateEmbeddings();
+			embeddingSpinner.succeed("[SUCCESS] Hotel embeddings generated");
+		} catch (error) {
+			embeddingSpinner.fail("[ERROR] Failed to generate embeddings");
+			console.error("[ERROR DETAILS]", error);
+			process.exit(1);
+		}
 
 		// Close connection
-		await mongoose.connection.close();
-		console.log("MongoDB connection closed");
+		const closeSpinner = ora("Closing MongoDB connection...").start();
+		try {
+			await mongoose.connection.close();
+			closeSpinner.succeed("[SUCCESS] Seeding completed and connection closed");
+		} catch (error) {
+			closeSpinner.fail("[ERROR] Failed to close connection");
+			console.error("[ERROR DETAILS]", error);
+			process.exit(1);
+		}
 	} catch (error) {
-		console.error("Error seeding database:", error);
+		console.error("[ERROR] Unexpected error during seeding:", error);
 		process.exit(1);
 	}
 };

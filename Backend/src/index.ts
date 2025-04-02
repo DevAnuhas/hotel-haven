@@ -3,6 +3,7 @@ import express from "express";
 import { clerkMiddleware } from "@clerk/express";
 import cors from "cors";
 import connectDB from "./infrastructure/db/connect";
+import ora from "ora";
 
 import hotelRouter from "./api/hotel";
 import bookingRouter from "./api/booking";
@@ -43,4 +44,7 @@ app.use(globalErrorHandlingMiddleware);
 
 // Define the port (Vercel will override this with its own PORT env variable)
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}...`));
+const spinner = ora(`Starting server on port ${PORT}...`).start();
+app.listen(PORT, () => {
+	spinner.succeed(`[SUCCESS] Server started on port ${PORT}`);
+});

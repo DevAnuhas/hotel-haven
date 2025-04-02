@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-
-dotenv.config();
+import "dotenv/config";
+import ora from "ora";
 
 const connectDB = async () => {
 	const MONGODB_URI = process.env.MONGODB_URI;
@@ -9,12 +8,16 @@ const connectDB = async () => {
 	if (!MONGODB_URI) {
 		throw new Error("Please set the MONGODB_URI environment variable");
 	}
+
+	const spinner = ora("Connecting to MongoDB...").start();
+
 	try {
 		await mongoose.connect(MONGODB_URI);
-		console.log("Connected to the database...");
+		spinner.succeed("[SUCCESS] Connected to MongoDB");
 	} catch (error) {
-		console.log("Error connecting to the database...");
-		console.error(error);
+		spinner.fail("[ERROR] Failed to connect to MongoDB");
+		console.error("[ERROR DETAILS]", error);
+		throw error;
 	}
 };
 
