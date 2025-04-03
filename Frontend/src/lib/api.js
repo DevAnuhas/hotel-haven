@@ -14,17 +14,37 @@ export const api = createApi({
 			return headers;
 		},
 	}),
-	tagTypes: ["Bookings", "Booking"], // Define tag types for cache invalidation
+	tagTypes: ["Bookings", "Booking", "Hotels", "Hotel"], // Define tag types for cache invalidation
 	endpoints: (builder) => ({
+		getHotelFilterOptions: builder.query({
+			query: () => "hotels/filters",
+		}),
 		getHotels: builder.query({
-			query: () => `hotels`,
+			query: ({ filters = {}, page, limit }) => {
+				const queryParams = new URLSearchParams({
+					...(filters.searchTerm && { searchTerm: filters.searchTerm }),
+					...(filters.minPrice && { minPrice: filters.minPrice }),
+					...(filters.maxPrice && { maxPrice: filters.maxPrice }),
+					...(filters.starRating && { starRating: filters.starRating }),
+					...(filters.city && { city: filters.city }),
+					...(filters.country && { country: filters.country }),
+					...(filters.category && { category: filters.category }),
+					...(filters.amenities &&
+						filters.amenities.length > 0 && {
+							amenities: filters.amenities.join(","),
+						}),
+					page,
+					limit,
+				});
+				return `hotels?${queryParams.toString()}`;
+			},
 		}),
 		getHotelById: builder.query({
 			query: (id) => `hotels/${id}`,
 		}),
 		getBookingById: builder.query({
 			query: (id) => `bookings/${id}`,
-			providesTags: (result, error, id) => [{ type: "Booking", id }],
+			providesTags: (id) => [{ type: "Booking", id }],
 		}),
 		getBookingsForUser: builder.query({
 			query: (id) => `bookings/user/${id}`,
@@ -42,7 +62,7 @@ export const api = createApi({
 				method: "PATCH",
 				body: { status: "cancelled", cancellationReason: reason },
 			}),
-			invalidatesTags: (result, error, { id }) => [
+			invalidatesTags: ({ id }) => [
 				{ type: "Booking", id },
 				{ type: "Bookings", id: "LIST" },
 			],
@@ -53,7 +73,7 @@ export const api = createApi({
 				method: "PUT",
 				body: { status: "archived" },
 			}),
-			invalidatesTags: (result, error, id) => [
+			invalidatesTags: (id) => [
 				{ type: "Booking", id },
 				{ type: "Bookings", id: "LIST" },
 			],
@@ -87,6 +107,7 @@ export const api = createApi({
 });
 
 export const {
+	useGetHotelFilterOptionsQuery,
 	useGetHotelsQuery,
 	useGetHotelByIdQuery,
 	useGetBookingByIdQuery,

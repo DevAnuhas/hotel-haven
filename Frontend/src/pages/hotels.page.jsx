@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGetHotelsQuery } from "@/lib/api";
+import { useGetHotelFilterOptionsQuery, useGetHotelsQuery } from "@/lib/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,21 +14,52 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	Pagination,
+	PaginationContent,
+	PaginationItem,
+	PaginationLink,
+	PaginationNext,
+	PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export function HotelsPage() {
-	const { data: hotels, isLoading, isError, error } = useGetHotelsQuery();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [priceRange, setPriceRange] = useState([0, 1000]);
 	const [starRating, setStarRating] = useState(null);
 	const [selectedAmenities, setSelectedAmenities] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [selectedCity, setSelectedCity] = useState(null);
+	const [page, setPage] = useState(1);
+	const limit = 4;
+
+	const filters = {
+		searchTerm,
+		minPrice: priceRange[0],
+		maxPrice: priceRange[1],
+		starRating: starRating || "any",
+		city: selectedCity || "all",
+		category: selectedCategory || "any",
+		amenities: selectedAmenities,
+	};
+
+	const {
+		data: hotelData,
+		isLoading,
+		isError,
+		error,
+	} = useGetHotelsQuery({ filters, page, limit });
+
+	// Get unique cities for the filter
+	const { data: filterOptions } = useGetHotelFilterOptionsQuery();
+	const cities = filterOptions?.cities || [];
 
 	if (isError) {
+		console.log(error);
 		return (
 			<div className="container mx-auto px-4 py-8 min-h-screen mt-24">
 				<div className="text-center">
-					<h1 className="text-2xl font-bold mb-4">Error Loading Hotel</h1>
+					<h1 className="text-2xl font-bold mb-4">Error Loading Hotels</h1>
 					<p className="text-muted-foreground">
 						{error.status + ": " + error.data.message}
 					</p>
@@ -37,62 +68,11 @@ export function HotelsPage() {
 		);
 	}
 
-	// Get unique cities for the filter
-	const cities = Array.from(
-		new Set(hotels?.map((hotel) => hotel.location.city))
-	);
+	const hotels = hotelData?.hotels || [];
+	const total = hotelData?.total || 0;
+	const totalPages = hotelData?.pages || 1;
 
 	// TODO: Use semantic search to filter hotels
-
-	// Filter hotels based on search criteria
-	const filteredHotels = hotels?.filter((hotel) => {
-		// Search term filter (name or description)
-		const matchesSearch =
-			searchTerm === "" ||
-			hotel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			hotel.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			hotel.location.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			hotel.location.country.toLowerCase().includes(searchTerm.toLowerCase());
-
-		// Price range filter (using the lowest priced room)
-		const lowestPrice = Math.min(...hotel.rooms.map((room) => room.basePrice));
-		const matchesPrice =
-			lowestPrice >= priceRange[0] && lowestPrice <= priceRange[1];
-
-		// Star rating filter
-		const matchesStarRating =
-			!starRating ||
-			starRating === "any" ||
-			hotel.starRating.toString() === starRating;
-
-		// City filter
-		const matchesCity =
-			!selectedCity ||
-			selectedCity === "all" ||
-			hotel.location.city === selectedCity;
-
-		// Category filter
-		const matchesCategory =
-			!selectedCategory ||
-			selectedCategory === "any" ||
-			hotel.category === selectedCategory;
-
-		// Amenities filter
-		const matchesAmenities =
-			selectedAmenities.length === 0 ||
-			selectedAmenities.every((selectedAmenity) => {
-				return hotel.amenities[selectedAmenity];
-			});
-
-		return (
-			matchesSearch &&
-			matchesPrice &&
-			matchesStarRating &&
-			matchesCity &&
-			matchesCategory &&
-			matchesAmenities
-		);
-	});
 
 	// Common amenities for filtering
 	const amenityDisplayNames = {
@@ -244,8 +224,7 @@ export function HotelsPage() {
 					<h2 className="text-xl font-semibold">
 						{isLoading
 							? "Loading..."
-							: `${filteredHotels?.length}
-						${filteredHotels?.length === 1 ? "hotel" : "hotels"} found`}
+							: `${total} ${total === 1 ? "hotel" : "hotels"} found`}
 					</h2>
 					<Select defaultValue="recommended">
 						<SelectTrigger className="w-[180px]">
@@ -259,27 +238,64 @@ export function HotelsPage() {
 						</SelectContent>
 					</Select>
 				</div>
-
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 					{isLoading ? (
 						Array.from({ length: 6 }, (_, index) => (
 							<HotelCardSkeleton key={index} />
 						))
-					) : filteredHotels.length > 0 ? (
-						filteredHotels?.map((hotel) => (
-							<HotelCard key={hotel._id} hotel={hotel} />
-						))
+					) : hotels?.length > 0 ? (
+						hotels.map((hotel) => <HotelCard key={hotel._id} hotel={hotel} />)
 					) : (
-						<div className="col-span-2 col-start-1 text-center py-12 border rounded-lg ">
-							<h3 className="text-lg font-medium mb-2">
-								{isError ? "Error" : "No hotels found"}
-							</h3>
+						<div className="col-span-2 text-center py-12 border rounded-lg">
+							<h3 className="text-lg font-medium mb-2">No hotels found</h3>
 							<p className="text-muted-foreground">
-								{isError ? { error } : "Try adjusting your filters"}
+								Try adjusting your filters
 							</p>
 						</div>
 					)}
 				</div>
+				{totalPages > 1 && (
+					<div className="mt-8 w-full mx-auto">
+						<Pagination>
+							<PaginationContent>
+								<PaginationItem>
+									<PaginationPrevious
+										onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+										className={
+											page === 1 ? "pointer-events-none opacity-50" : ""
+										}
+									/>
+								</PaginationItem>
+
+								{Array.from({ length: totalPages }, (_, i) => i + 1).map(
+									(pageNum) => (
+										<PaginationItem key={pageNum}>
+											<PaginationLink
+												onClick={() => setPage(pageNum)}
+												isActive={page === pageNum}
+											>
+												{pageNum}
+											</PaginationLink>
+										</PaginationItem>
+									)
+								)}
+
+								<PaginationItem>
+									<PaginationNext
+										onClick={() =>
+											setPage((prev) => Math.min(prev + 1, totalPages))
+										}
+										className={
+											page === totalPages
+												? "pointer-events-none opacity-50"
+												: ""
+										}
+									/>
+								</PaginationItem>
+							</PaginationContent>
+						</Pagination>
+					</div>
+				)}
 			</div>
 		</div>
 	);
