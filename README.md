@@ -79,7 +79,7 @@ cd hotel-haven
 ```bash
 # Navigate to the frontend directory and install dependencies
 cd Frontend
-npm install
+npm install --legacy-peer-deps
 
 # Navigate to the backend directory and install dependencies
 cd ../Backend
