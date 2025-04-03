@@ -20,7 +20,7 @@ export const api = createApi({
 			query: () => "hotels/filters",
 		}),
 		getHotels: builder.query({
-			query: ({ filters = {}, page, limit }) => {
+			query: (filters) => {
 				const queryParams = new URLSearchParams({
 					...(filters.searchTerm && { searchTerm: filters.searchTerm }),
 					...(filters.minPrice && { minPrice: filters.minPrice }),
@@ -33,8 +33,9 @@ export const api = createApi({
 						filters.amenities.length > 0 && {
 							amenities: filters.amenities.join(","),
 						}),
-					page,
-					limit,
+					...(filters.page && { page: filters.page }),
+					...(filters.limit && { limit: filters.limit }),
+					...(filters.sortBy && { sortBy: filters.sortBy }),
 				});
 				return `hotels?${queryParams.toString()}`;
 			},

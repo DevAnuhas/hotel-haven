@@ -31,6 +31,7 @@ export function HotelsPage() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [selectedCity, setSelectedCity] = useState(null);
 	const [page, setPage] = useState(1);
+	const [sortBy, setSortBy] = useState("recommended");
 	const limit = 4;
 
 	const filters = {
@@ -41,6 +42,9 @@ export function HotelsPage() {
 		city: selectedCity || "all",
 		category: selectedCategory || "any",
 		amenities: selectedAmenities,
+		sortBy,
+		page,
+		limit,
 	};
 
 	const {
@@ -48,7 +52,7 @@ export function HotelsPage() {
 		isLoading,
 		isError,
 		error,
-	} = useGetHotelsQuery({ filters, page, limit });
+	} = useGetHotelsQuery(filters);
 
 	// Get unique cities for the filter
 	const { data: filterOptions } = useGetHotelFilterOptionsQuery();
@@ -210,6 +214,8 @@ export function HotelsPage() {
 								setSelectedCity(null);
 								setSelectedCategory(null);
 								setSelectedAmenities([]);
+								setPage(1);
+								setSortBy("recommended");
 							}}
 							variant="outline"
 						>
@@ -226,7 +232,7 @@ export function HotelsPage() {
 							? "Loading..."
 							: `${total} ${total === 1 ? "hotel" : "hotels"} found`}
 					</h2>
-					<Select defaultValue="recommended">
+					<Select value={sortBy} onValueChange={(value) => setSortBy(value)}>
 						<SelectTrigger className="w-[180px]">
 							<SelectValue placeholder="Sort by" />
 						</SelectTrigger>
