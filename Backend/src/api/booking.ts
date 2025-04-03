@@ -14,17 +14,20 @@ import { isAdmin } from "./middlewares/authorization-middleware";
 
 const bookingRouter = express.Router();
 
-bookingRouter.route("/").post(createBooking).get(getAllBookings);
+bookingRouter
+	.route("/")
+	.post(isAuthenticated, createBooking)
+	.get(isAuthenticated, isAdmin, getAllBookings);
 bookingRouter
 	.route("/hotel/:hotelId")
 	.get(isAuthenticated, getBookingsForHotel);
-bookingRouter.route("/user/:userId").get(getBookingsForUser);
+bookingRouter.route("/user/:userId").get(isAuthenticated, getBookingsForUser);
 bookingRouter
 	.route("/:bookingId")
-	.get(getBookingById)
+	.get(isAuthenticated, getBookingById)
 	// .update(isAuthenticated, updateBooking)
-	// .delete(deleteBooking)
-	.patch(cancelBooking)
-	.put(archiveBooking);
+	// .delete(isAdmin, deleteBooking)
+	.patch(isAuthenticated, cancelBooking)
+	.put(isAuthenticated, archiveBooking);
 
 export default bookingRouter;
