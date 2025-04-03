@@ -1,5 +1,6 @@
 import express from "express";
 import {
+	getHotelFilterOptions,
 	getHotels,
 	getHotelById,
 	createHotel,
@@ -15,10 +16,15 @@ const hotelRouter = express.Router();
 
 hotelRouter.post("/embeddings/create", createEmbeddings);
 hotelRouter.get("/search/retrieve", retrieveHotels);
-hotelRouter.get("/", getHotels);
-hotelRouter.get("/:id", getHotelById);
-hotelRouter.post("/", isAuthenticated, isAdmin, createHotel);
-hotelRouter.delete("/:id", isAuthenticated, isAdmin, deleteHotel);
-hotelRouter.put("/:id", isAuthenticated, isAdmin, updateHotel);
+hotelRouter.get("/filters", getHotelFilterOptions);
+hotelRouter
+	.route("/")
+	.get(getHotels)
+	.post(isAuthenticated, isAdmin, createHotel);
+hotelRouter
+	.route("/:id")
+	.get(getHotelById)
+	.delete(isAuthenticated, isAdmin, deleteHotel)
+	.put(isAuthenticated, isAdmin, updateHotel);
 
 export default hotelRouter;

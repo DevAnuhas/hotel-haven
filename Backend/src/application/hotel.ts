@@ -6,6 +6,25 @@ import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import { CreateHotelDTO, UpdateHotelDTO } from "../domain/dtos/hotel";
 
+// Get filter options for hotel search
+export const getHotelFilterOptions = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const cities = await Hotel.distinct("location.city");
+		const countries = await Hotel.distinct("location.country");
+
+		res.status(200).json({
+			cities: cities.sort(),
+			countries: countries.sort(),
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
 // Get all hotels
 export const getHotels = async (
 	req: Request,
@@ -13,11 +32,84 @@ export const getHotels = async (
 	next: NextFunction
 ) => {
 	try {
-		const hotels = await Hotel.find();
-		if (!hotels) {
-			throw new NotFoundError("No hotels found");
+		const {
+			searchTerm,
+			minPrice,
+			maxPrice,
+			starRating,
+			city,
+			country,
+			category,
+			amenities,
+			page = 1,
+			limit = 10,
+		} = req.query;
+
+		// Build the Mongoose query
+		let query = {};
+
+		// Search term filter (case-insensitive)
+		if (searchTerm) {
+			query.$or = [
+				{ name: { $regex: searchTerm, $options: "i" } },
+				{ description: { $regex: searchTerm, $options: "i" } },
+				{ "location.city": { $regex: searchTerm, $options: "i" } },
+				{ "location.country": { $regex: searchTerm, $options: "i" } },
+			];
 		}
-		res.status(200).json(hotels);
+
+		// Price range filter (aggregate to find lowest room price)
+		if (minPrice || maxPrice) {
+			const priceQuery = {};
+			if (minPrice) priceQuery.$gte = Number(minPrice);
+			if (maxPrice) priceQuery.$lte = Number(maxPrice);
+			query["rooms.basePrice"] = priceQuery;
+		}
+
+		// Star rating filter
+		if (starRating && starRating !== "any") {
+			query.starRating = Number(starRating);
+		}
+
+		// City filter
+		if (city && city !== "all") {
+			query["location.city"] = city;
+		}
+
+		if (country) {
+			query["location.country"] = country;
+		}
+
+		// Category filter
+		if (category && category !== "any") {
+			query.category = category;
+		}
+
+		// Amenities filter (all selected amenities must be true)
+		if (amenities) {
+			const amenityList = amenities.split(",");
+			amenityList.forEach((amenity) => {
+				query[`amenities.${amenity}`] = true;
+			});
+		}
+
+		// Pagination logic
+		const pageNum = parseInt(page, 10);
+		const limitNum = parseInt(limit, 10);
+		const skip = (pageNum - 1) * limitNum;
+
+		// Fetch hotels with pagination
+		const hotels = await Hotel.find(query).skip(skip).limit(limitNum).lean();
+
+		// Get total count for pagination metadata
+		const total = await Hotel.countDocuments(query);
+
+		res.status(200).json({
+			hotels,
+			total,
+			page: pageNum,
+			pages: Math.ceil(total / limitNum),
+		});
 	} catch (error) {
 		next(error);
 	}
