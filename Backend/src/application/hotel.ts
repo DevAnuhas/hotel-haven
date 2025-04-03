@@ -43,6 +43,7 @@ export const getHotels = async (
 			amenities,
 			page = 1,
 			limit = 10,
+			sortBy = "recommended",
 		} = req.query;
 
 		// Build the Mongoose query
@@ -98,8 +99,32 @@ export const getHotels = async (
 		const limitNum = parseInt(limit, 10);
 		const skip = (pageNum - 1) * limitNum;
 
-		// Fetch hotels with pagination
-		const hotels = await Hotel.find(query).skip(skip).limit(limitNum).lean();
+		// Define sorting logic
+		let sortOption = {};
+		switch (sortBy) {
+			case "price-low":
+				sortOption = { "rooms.basePrice": 1 };
+				break;
+			case "price-high":
+				sortOption = { "rooms.basePrice": -1 };
+				break;
+			case "rating":
+				sortOption = { "rating.average": -1 };
+				break;
+			case "recommended":
+			default:
+				sortOption = { createdAt: -1 };
+				break;
+		}
+
+		// Fetch hotels
+		const hotels = await Hotel.find(query)
+			.sort(sortOption)
+			.skip(skip)
+			.limit(limitNum)
+			.lean();
+
+		console.log(hotels);
 
 		// Get total count for pagination metadata
 		const total = await Hotel.countDocuments(query);
