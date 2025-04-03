@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { HotelCard } from "@/components/HotelCard";
+import { HotelCard, HotelCardSkeleton } from "@/components/HotelCard";
 import {
 	Select,
 	SelectContent,
@@ -24,10 +24,6 @@ export function HotelsPage() {
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [selectedCity, setSelectedCity] = useState(null);
 
-	if (isLoading || !hotels) {
-		return <div>Loading...</div>;
-	}
-
 	if (isError) {
 		return (
 			<div className="container mx-auto px-4 py-8 min-h-screen mt-24">
@@ -43,13 +39,13 @@ export function HotelsPage() {
 
 	// Get unique cities for the filter
 	const cities = Array.from(
-		new Set(hotels.map((hotel) => hotel.location.city))
+		new Set(hotels?.map((hotel) => hotel.location.city))
 	);
 
 	// TODO: Use semantic search to filter hotels
 
 	// Filter hotels based on search criteria
-	const filteredHotels = hotels.filter((hotel) => {
+	const filteredHotels = hotels?.filter((hotel) => {
 		// Search term filter (name or description)
 		const matchesSearch =
 			searchTerm === "" ||
@@ -84,14 +80,8 @@ export function HotelsPage() {
 		// Amenities filter
 		const matchesAmenities =
 			selectedAmenities.length === 0 ||
-			selectedAmenities.every((amenity) => {
-				const allAmenities = [
-					...hotel.amenities.general,
-					...hotel.amenities.wellness,
-					...hotel.amenities.food,
-					...hotel.amenities.services,
-				];
-				return allAmenities.includes(amenity);
+			selectedAmenities.every((selectedAmenity) => {
+				return hotel.amenities[selectedAmenity];
 			});
 
 		return (
@@ -105,15 +95,17 @@ export function HotelsPage() {
 	});
 
 	// Common amenities for filtering
-	const commonAmenities = [
-		"WiFi",
-		"Parking",
-		"Swimming Pool",
-		"Gym",
-		"Spa",
-		"Restaurant",
-		"Room Service",
-	];
+	const amenityDisplayNames = {
+		freeWifi: "Free Wi-Fi",
+		freeParking: "Free Parking",
+		swimmingPool: "Swimming Pool",
+		gym: "Gym",
+		spa: "Spa",
+		restaurant: "Restaurant",
+		breakfastIncluded: "Breakfast Included",
+		bar: "Bar",
+	};
+	const commonAmenities = Object.keys(amenityDisplayNames);
 
 	return (
 		<div className="container mx-auto px-4 py-16 mt-16 min-h-screen grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -221,7 +213,9 @@ export function HotelsPage() {
 												}
 											}}
 										/>
-										<Label htmlFor={`amenity-${amenity}`}>{amenity}</Label>
+										<Label htmlFor={`amenity-${amenity}`}>
+											{amenityDisplayNames[amenity]}
+										</Label>
 									</div>
 								))}
 							</div>
@@ -248,8 +242,10 @@ export function HotelsPage() {
 			<div className="md:col-span-3">
 				<div className="mb-4 flex justify-between items-center">
 					<h2 className="text-xl font-semibold">
-						{filteredHotels.length}{" "}
-						{filteredHotels.length === 1 ? "hotel" : "hotels"} found
+						{isLoading
+							? "Loading..."
+							: `${filteredHotels?.length}
+						${filteredHotels?.length === 1 ? "hotel" : "hotels"} found`}
 					</h2>
 					<Select defaultValue="recommended">
 						<SelectTrigger className="w-[180px]">
@@ -265,15 +261,21 @@ export function HotelsPage() {
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-					{filteredHotels.length > 0 ? (
-						filteredHotels.map((hotel) => (
+					{isLoading ? (
+						Array.from({ length: 6 }, (_, index) => (
+							<HotelCardSkeleton key={index} />
+						))
+					) : filteredHotels.length > 0 ? (
+						filteredHotels?.map((hotel) => (
 							<HotelCard key={hotel._id} hotel={hotel} />
 						))
 					) : (
-						<div className="text-center py-12 border rounded-lg">
-							<h3 className="text-lg font-medium mb-2">No hotels found</h3>
+						<div className="col-span-2 col-start-1 text-center py-12 border rounded-lg ">
+							<h3 className="text-lg font-medium mb-2">
+								{isError ? "Error" : "No hotels found"}
+							</h3>
 							<p className="text-muted-foreground">
-								Try adjusting your filters
+								{isError ? { error } : "Try adjusting your filters"}
 							</p>
 						</div>
 					)}
