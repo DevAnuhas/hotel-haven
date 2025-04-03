@@ -6,6 +6,16 @@ import NotFoundError from "../domain/errors/not-found-error";
 import ValidationError from "../domain/errors/validation-error";
 import { CreateHotelDTO, UpdateHotelDTO } from "../domain/dtos/hotel";
 
+interface HotelQuery {
+	$or?: Array<{ [key: string]: { $regex: string; $options: string } }>;
+	"rooms.basePrice"?: { $gte?: number; $lte?: number };
+	starRating?: number;
+	"location.city"?: string;
+	"location.country"?: string;
+	category?: string;
+	[key: `amenities.${string}`]: boolean;
+}
+
 // Get filter options for hotel search
 export const getHotelFilterOptions = async (
 	req: Request,
@@ -41,27 +51,27 @@ export const getHotels = async (
 			country,
 			category,
 			amenities,
-			page = 1,
-			limit = 10,
+			page = "1",
+			limit = "10",
 			sortBy = "recommended",
 		} = req.query;
 
-		// Build the Mongoose query
-		let query = {};
+		// Explicitly type query as HotelQuery
+		const query: HotelQuery = {};
 
-		// Search term filter (case-insensitive)
+		// Search term filter
 		if (searchTerm) {
 			query.$or = [
-				{ name: { $regex: searchTerm, $options: "i" } },
-				{ description: { $regex: searchTerm, $options: "i" } },
-				{ "location.city": { $regex: searchTerm, $options: "i" } },
-				{ "location.country": { $regex: searchTerm, $options: "i" } },
+				{ name: { $regex: String(searchTerm), $options: "i" } },
+				{ description: { $regex: String(searchTerm), $options: "i" } },
+				{ "location.city": { $regex: String(searchTerm), $options: "i" } },
+				{ "location.country": { $regex: String(searchTerm), $options: "i" } },
 			];
 		}
 
-		// Price range filter (aggregate to find lowest room price)
+		// Price range filter
 		if (minPrice || maxPrice) {
-			const priceQuery = {};
+			const priceQuery: { $gte?: number; $lte?: number } = {};
 			if (minPrice) priceQuery.$gte = Number(minPrice);
 			if (maxPrice) priceQuery.$lte = Number(maxPrice);
 			query["rooms.basePrice"] = priceQuery;
@@ -74,33 +84,36 @@ export const getHotels = async (
 
 		// City filter
 		if (city && city !== "all") {
-			query["location.city"] = city;
+			query["location.city"] = String(city);
 		}
 
 		if (country) {
-			query["location.country"] = country;
+			query["location.country"] = String(country);
 		}
 
 		// Category filter
 		if (category && category !== "any") {
-			query.category = category;
+			query.category = String(category);
 		}
 
-		// Amenities filter (all selected amenities must be true)
+		// Amenities filter
 		if (amenities) {
-			const amenityList = amenities.split(",");
-			amenityList.forEach((amenity) => {
-				query[`amenities.${amenity}`] = true;
-			});
+			// Type guard to ensure amenities is a string
+			if (typeof amenities === "string") {
+				const amenityList = amenities.split(",");
+				amenityList.forEach((amenity: string) => {
+					query[`amenities.${amenity}`] = true;
+				});
+			}
 		}
 
 		// Pagination logic
-		const pageNum = parseInt(page, 10);
-		const limitNum = parseInt(limit, 10);
+		const pageNum = parseInt(String(page), 10);
+		const limitNum = parseInt(String(limit), 10);
 		const skip = (pageNum - 1) * limitNum;
 
-		// Define sorting logic
-		let sortOption = {};
+		// Sorting logic
+		let sortOption: { [key: string]: 1 | -1 } = {};
 		switch (sortBy) {
 			case "price-low":
 				sortOption = { "rooms.basePrice": 1 };
@@ -124,9 +137,6 @@ export const getHotels = async (
 			.limit(limitNum)
 			.lean();
 
-		console.log(hotels);
-
-		// Get total count for pagination metadata
 		const total = await Hotel.countDocuments(query);
 
 		res.status(200).json({
