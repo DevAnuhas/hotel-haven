@@ -30,30 +30,30 @@ function Footer() {
 		},
 	];
 	return (
-		<footer className="bg-gray-100 text-gray-600">
+		<footer className="bg-muted">
 			<div className="container mx-auto px-6 py-12">
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-8">
 					<div className="space-y-4">
 						<a
 							href="/"
-							className="text-2xl font-serif font-bold text-gray-900 flex items-center"
+							className="text-2xl font-serif font-bold text-foreground flex items-center"
 						>
 							StayGenius
 						</a>
-						<p className="text-sm">
+						<p className="text-sm text-muted-foreground">
 							StayGenius combines cutting-edge AI with user-friendly features to
 							make hotel booking effortless and enjoyable.
 						</p>
 					</div>
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold text-gray-900">About</h3>
+						<h3 className="text-lg font-semibold text-foreground">About</h3>
 						<ul className="space-y-2">
 							{aboutMenu.map((item, index) => {
 								return (
 									<li key={index}>
 										<a
 											href={item.link}
-											className="hover:text-gray-900 transition-colors"
+											className="text-muted-foreground hover:text-foreground transition-colors"
 										>
 											{item.title}
 										</a>
@@ -63,14 +63,14 @@ function Footer() {
 						</ul>
 					</div>
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold text-gray-900">Support</h3>
+						<h3 className="text-lg font-semibold text-foreground">Support</h3>
 						<ul className="space-y-2">
 							{supportMenu.map((item, index) => {
 								return (
 									<li key={index}>
 										<a
 											href={item.link}
-											className="hover:text-gray-900 transition-colors"
+											className="text-muted-foreground hover:text-foreground transition-colors"
 										>
 											{item.title}
 										</a>
@@ -80,11 +80,13 @@ function Footer() {
 						</ul>
 					</div>
 					<div className="space-y-4">
-						<h3 className="text-lg font-semibold text-gray-900">Get Updates</h3>
+						<h3 className="text-lg font-semibold text-foreground">
+							Get Updates
+						</h3>
 						<form className="flex gap-2">
 							<input
 								type="email"
-								className="flex h-9 w-full rounded-md border px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-white border-gray-300 text-gray-900 placeholder:text-gray-400"
+								className="flex h-9 w-full rounded-md border px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm bg-muted-foreground/30 hover:bg-muted-foreground/20 border-muted-foreground placeholder:text-muted-foreground/80"
 								placeholder="Enter your email"
 								required
 							/>
@@ -99,14 +101,14 @@ function Footer() {
 							<a
 								href="https://instagram.com"
 								target="_blank"
-								className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors"
+								className="bg-muted-foreground/30 hover:bg-muted-foreground/20 p-2 rounded-full transition-colors"
 							>
 								<Instagram size={20} />
 							</a>
 							<a
 								href="https://twitter.com"
 								target="_blank"
-								className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors"
+								className="bg-muted-foreground/30 hover:bg-muted-foreground/20 p-2 rounded-full transition-colors"
 							>
 								<Twitter size={20} />
 								<span className="sr-only">Twitter</span>
@@ -114,7 +116,7 @@ function Footer() {
 							<a
 								href="https://facebook.com"
 								target="_blank"
-								className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors"
+								className="bg-muted-foreground/30 hover:bg-muted-foreground/20 p-2 rounded-full transition-colors"
 							>
 								<Facebook size={20} />
 								<span className="sr-only">Facebook</span>
@@ -122,7 +124,7 @@ function Footer() {
 							<a
 								href="https://discord.com"
 								target="_blank"
-								className="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-colors"
+								className="bg-muted-foreground/30 hover:bg-muted-foreground/20 p-2 rounded-full transition-colors"
 							>
 								<MessageCircle size={20} />
 								<span className="sr-only">Discord</span>
@@ -137,13 +139,13 @@ function Footer() {
 					<div className="flex gap-4 mt-4 md:mt-0">
 						<a
 							href="/privacy"
-							className="text-sm hover:text-gray-900 transition-colors"
+							className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 						>
 							Privacy Policy
 						</a>
 						<a
 							href="/terms"
-							className="text-sm hover:text-gray-900 transition-colors"
+							className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 						>
 							Terms of Service
 						</a>

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Globe } from "lucide-react";
-import { Link } from "react-router";
+import { ModeToggle } from "@/components/ui/mode-toggle";
+import { useTheme } from "@/components/ui/theme-provider";
 import {
 	SignedIn,
 	SignInButton,
@@ -9,10 +9,12 @@ import {
 	SignedOut,
 	useUser,
 } from "@clerk/clerk-react";
+import { Link } from "react-router";
 import { CircleUser } from "lucide-react";
 
 function Navigation() {
 	const { user } = useUser();
+	const { theme } = useTheme();
 	return (
 		<header className="flex-no-wrap overflow-y-hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 lg:flex-wrap border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<Link
@@ -21,7 +23,11 @@ function Navigation() {
 				asChild
 			>
 				<img
-					src="./assets/staygenius-logo.png"
+					src={
+						theme === "dark"
+							? "./assets/staygenius-logo-white.png"
+							: "./assets/staygenius-logo.png"
+					}
 					alt="StayGenius Logo"
 					className="h-8"
 				/>
@@ -43,10 +49,7 @@ function Navigation() {
 				>
 					Explore Hotels
 				</Link>
-				<Button variant="ghost">
-					<Globe className="h-5 w-5" />
-					EN
-				</Button>
+				<ModeToggle className="hidden md:block" />
 				<SignedOut>
 					<SignInButton mode="modal">
 						<Button variant="ghost">Sign In</Button>
