@@ -54,9 +54,9 @@ function Navigation() {
 	}, [isMenuOpen]);
 
 	return (
-		<header className="fixed z-50 top-0 w-full bg-background">
+		<header className="fixed z-50 top-0 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
 			{/* Desktop Navigation */}
-			<div className="flex-no-wrap overflow-y-hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 lg:flex-wrap border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 w-full">
+			<div className="relative container mx-auto flex-no-wrap overflow-y-hidden inset-0 z-50 flex items-center justify-between px-8 py-4 lg:flex-wrap ">
 				<Link
 					to="/"
 					className="text-2xl font-serif font-bold flex items-center gap-2"
@@ -126,14 +126,14 @@ function Navigation() {
 
 			{/* Mobile Navigation */}
 			<nav
-				className={`fixed -z-1 overflow-y-auto overflow-x-hidden h-fit p-8 pt-24 mb-8 inset-0 bg-popover border-b transition-all duration-300 ease-in-out ${
+				className={`w-full fixed -z-1 overflow-y-auto overflow-x-hidden h-fit p-8 pt-24 mb-8 inset-0 bg-popover border-b transition-all duration-300 ease-in-out ${
 					isMenuOpen
 						? "opacity-100 translate-y-0"
 						: "opacity-50 -translate-y-[100%] pointer-events-none"
 				}`}
 			>
 				<div
-					className="flex flex-col space-y-6 text-md font-medium transition-all duration-300 ease-in-out"
+					className="container mx-auto flex flex-col space-y-6 text-md font-medium transition-all duration-300 ease-in-out"
 					onClick={() => setIsMenuOpen(!isMenuOpen)}
 				>
 					{navigationItems.map((item, index) => {

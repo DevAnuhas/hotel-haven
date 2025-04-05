@@ -45,17 +45,21 @@ export default function Hero() {
 	}, [searchResults, isFetching, dispatch]);
 
 	return (
-		<div className="relative min-h-screen">
-			<div className="relative z-10 flex flex-col items-center text-white justify-center px-8 pt-48 pb-32">
-				<h1 className="text-4xl md:text-6xl font-bold mb-8 text-center">
-					Find Your Perfect Stay with AI
-				</h1>
-				<p className="text-xl font-medium mb-12 text-center max-w-2xl">
-					Describe your dream destination and experience, and
+		<div className="container mx-auto px-8 min-h-screen grid grid-cols-1 lg:grid-cols-3 gap-y-12 lg:gap-x-12">
+			{/* Left column */}
+			<div className="relative z-10 flex flex-col text-white justify-center col-span-2 pt-24 lg:pt-0">
+				<h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-semibold mb-8 !leading-[1.2]">
+					Find the Perfect Hotel
 					<br />
-					we&apos;ll find the perfect place for you.
+					with AI-Powered
+					<br />
+					Recommendations
+				</h1>
+				<p className="text-md sm:text-lg md:text-xl font-light mb-12 max-w-2xl">
+					Welcome to our AI-powered hotel recommendation engine, where our
+					cutting-edge algorithms analyze your preferences and past bookings to
+					provide you the perfect accommodations.
 				</p>
-
 				<form
 					onSubmit={handleSearch}
 					className="w-full max-w-3xl md:h-16 h-14 rounded-full flex items-center"
@@ -63,13 +67,40 @@ export default function Hero() {
 					<Input />
 				</form>
 			</div>
-			<div className="absolute top-0 left-0 w-full h-full object-cover -z-10">
+			{/* Right column */}
+			<div className="relative z-10 w-full h-fit lg:h-full lg:w-fit flex lg:flex-col text-white text-left justify-between lg:justify-center items-center ml-auto lg:gap-16">
+				<div className="w-fit lg:w-full">
+					<h2 className="text-4xl md:text-5xl xl:text-6xl font-bold mb-2 md:mb-4">
+						12k+
+					</h2>
+					<p className="text-md sm:text-lg md:text-xl font-light max-w-2xl">
+						Satisfied Visitors
+					</p>
+				</div>
+				<div className="w-fit lg:w-full">
+					<h2 className="text-4xl md:text-5xl xl:text-6xl font-bold mb-2 md:mb-4">
+						86k+
+					</h2>
+					<p className="text-md sm:text-lg md:text-xl font-light max-w-2xl">
+						Amazing Reviews
+					</p>
+				</div>
+				<div className="w-fit lg:w-full">
+					<h2 className="text-4xl md:text-5xl xl:text-6xl font-bold mb-2 md:mb-4">
+						27k+
+					</h2>
+					<p className="text-md sm:text-lg md:text-xl font-light max-w-2xl">
+						Bookings Made
+					</p>
+				</div>
+			</div>
+			<div className="absolute inset-0 w-full h-full object-cover -z-10">
 				<img
 					src="./assets/hero-bg.jpg"
 					alt="Hero Background"
 					className="w-full h-full object-cover"
 				/>
-				<div className="absolute top-0 left-0 w-full h-full bg-black opacity-50"></div>
+				<div className="absolute inset-0 w-full h-full bg-black/75"></div>
 			</div>
 		</div>
 	);
