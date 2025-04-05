@@ -17,7 +17,7 @@ export default function Testimonials() {
 			title: "USA",
 			avatar: "",
 			review:
-				"Hotel Haven made my trip so easy! The AI search feature was a game-changer. I found exactly what I was looking for in minutes.",
+				"StayGenius made my trip so easy! The AI search feature was a game-changer. I found exactly what I was looking for in minutes.",
 			rating: 5,
 		},
 		{
@@ -25,7 +25,7 @@ export default function Testimonials() {
 			title: "India",
 			avatar: "",
 			review:
-				"I discovered a hidden gem in Bali thanks to Hotel Haven. It was the best vacation I’ve ever had!",
+				"I discovered a hidden gem in Bali thanks to StayGenius. It was the best vacation I’ve ever had!",
 			rating: 4,
 		},
 		{
@@ -33,7 +33,7 @@ export default function Testimonials() {
 			title: "UK",
 			avatar: "",
 			review:
-				"Their customer service is excellent, and the hotel recommendations were perfect. I’ll definitely use Hotel Haven again!",
+				"Their customer service is excellent, and the hotel recommendations were perfect. I’ll definitely use StayGenius again!",
 			rating: 5,
 		},
 		{
@@ -41,7 +41,7 @@ export default function Testimonials() {
 			title: "Australia",
 			avatar: "",
 			review:
-				"I’ve traveled extensively, but Hotel Haven’s global reach and verified reviews gave me confidence in my choices. Highly recommended!",
+				"I’ve traveled extensively, but StayGenius’s global reach and verified reviews gave me confidence in my choices. Highly recommended!",
 			rating: 4,
 		},
 		{
@@ -49,7 +49,7 @@ export default function Testimonials() {
 			title: "Japan",
 			avatar: "",
 			review:
-				"The seamless booking process made everything stress-free. Hotel Haven truly exceeded my expectations!",
+				"The seamless booking process made everything stress-free. StayGenius truly exceeded my expectations!",
 			rating: 4,
 		},
 	];

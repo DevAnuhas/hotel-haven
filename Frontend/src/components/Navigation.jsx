@@ -14,12 +14,19 @@ import { CircleUser } from "lucide-react";
 function Navigation() {
 	const { user } = useUser();
 	return (
-		<header className="flex-no-wrap overflow-y-hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8  py-4 lg:flex-wrap border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-			<div className="flex items-center space-x-8">
-				<Link to="/" className="text-2xl font-bold ">
-					Hotel Haven
-				</Link>
-			</div>
+		<header className="flex-no-wrap overflow-y-hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 lg:flex-wrap border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+			<Link
+				to="/"
+				className="text-2xl font-serif font-bold flex items-center gap-2"
+				asChild
+			>
+				<img
+					src="./assets/staygenius-logo.png"
+					alt="StayGenius Logo"
+					className="h-8"
+				/>
+				StayGenius
+			</Link>
 
 			<nav className="flex items-center space-x-6">
 				{user?.publicMetadata.role === "admin" && (
