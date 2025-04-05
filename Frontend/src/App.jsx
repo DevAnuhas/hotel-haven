@@ -1,5 +1,6 @@
-import "./App.css";
+import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import ScrollToTop from "@/components/ScrollToTop";
 
 import RootLayout from "@/layouts/root.layout";
@@ -17,11 +18,10 @@ import AccountPage from "@/pages/account.page";
 import BookingPage from "@/pages/booking.page";
 import BookingConfirmation from "@/components/BookingConfirmation";
 import BookingDetailsPage from "@/pages/booking-details.page";
-import { ThemeProvider } from "@/components/ui/theme-provider";
 
 function App() {
 	return (
-		<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+		<ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
 			<BrowserRouter>
 				<ScrollToTop />
 				<Routes>
