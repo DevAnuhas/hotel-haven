@@ -29,7 +29,7 @@ function Features() {
 			<div className="container mx-auto py-6 md:py-12 lg:py-16">
 				<div className="mb-6 pb-4 space-y-3">
 					<h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-						Why Choose Hotel Haven
+						Why Choose StayGenius
 					</h2>
 					<p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
 						Experience seamless travel planning with our unique features.

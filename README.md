@@ -1,4 +1,4 @@
-# Hotel Haven
+# StayGenius
 
 ### License
 
@@ -9,7 +9,7 @@ This product is licensed under [MIT License](License.txt).
 
 ## Introduction
 
-Hotel Haven is a smart hotel booking platform that uses AI-powered search and recommendations to help users find the perfect hotel for their needs. The platform provides a user-friendly interface for browsing hotels, searching for specific locations, and booking rooms with ease.
+StayGenius is a smart hotel booking platform that uses AI-powered search and recommendations to help users find the perfect hotel for their needs. The platform provides a user-friendly interface for browsing hotels, searching for specific locations, and booking rooms with ease.
 
 ---
 
@@ -26,8 +26,8 @@ Hotel Haven is a smart hotel booking platform that uses AI-powered search and re
 
 **Deployed URLs**
 
-- Frontend: [https://hotel-haven-frontend.vercel.app](https://hotel-haven-frontend.vercel.app)
-- Backend: [https://hotel-haven-api.vercel.app](https://hotel-haven-api.vercel.app)
+- Frontend: [https://staygenius.vercel.app](https://staygenius.vercel.app)
+- Backend: [https://staygenius-api.vercel.app](https://staygenius-api.vercel.app)
 
 ---
 
