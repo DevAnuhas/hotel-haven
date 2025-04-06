@@ -12,7 +12,6 @@ import { cn } from "@/lib/utils";
 export function HotelImageCarousel({ images, className, autoplayDelay }) {
 	const [api, setApi] = useState(null);
 	const [current, setCurrent] = useState(0);
-	const [showThumbnails, setShowThumbnails] = useState(true);
 
 	// Set up autoplay plugin
 	const autoplayOptions = {
@@ -50,19 +49,6 @@ export function HotelImageCarousel({ images, className, autoplayDelay }) {
 		},
 		[api]
 	);
-
-	useEffect(() => {
-		const checkScreenSize = () => {
-			setShowThumbnails(window.innerWidth >= 768);
-		};
-
-		checkScreenSize();
-		window.addEventListener("resize", checkScreenSize);
-
-		return () => {
-			window.removeEventListener("resize", checkScreenSize);
-		};
-	}, []);
 
 	if (!images || images.length === 0) {
 		return (
@@ -107,27 +93,25 @@ export function HotelImageCarousel({ images, className, autoplayDelay }) {
 				<CarouselNext className="right-2 bg-background/80 hover:bg-background" />
 			</Carousel>
 
-			{showThumbnails && (
-				<div className="flex space-x-2 overflow-x-auto pb-2">
-					{images.map((image, index) => (
-						<button
-							key={index}
-							onClick={() => scrollTo(index)}
-							className={cn(
-								"relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-md border-2 transition-all",
-								current === index ? "border-primary" : "border-transparent"
-							)}
-							aria-label={`View image ${index + 1}`}
-						>
-							<img
-								src={image || "/assets/placeholder.svg"}
-								alt={`Thumbnail ${index + 1}`}
-								className="object-cover"
-							/>
-						</button>
-					))}
-				</div>
-			)}
+			<div className="hidden sm:flex space-x-2 overflow-x-auto pb-2">
+				{images.map((image, index) => (
+					<button
+						key={index}
+						onClick={() => scrollTo(index)}
+						className={cn(
+							"relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-md border-2 transition-all",
+							current === index ? "border-primary" : "border-transparent"
+						)}
+						aria-label={`View image ${index + 1}`}
+					>
+						<img
+							src={image || "/assets/placeholder.svg"}
+							alt={`Thumbnail ${index + 1}`}
+							className="object-cover"
+						/>
+					</button>
+				))}
+			</div>
 		</div>
 	);
 }

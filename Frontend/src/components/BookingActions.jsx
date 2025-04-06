@@ -11,7 +11,7 @@ const BookingActions = ({
 	hideViewDetails = false,
 }) => {
 	return (
-		<div className="flex flex-wrap justify-start gap-2">
+		<div className="flex flex-wrap justify-between sm:justify-start gap-2">
 			{(booking.status === "completed" || booking.status === "cancelled") && (
 				<Button
 					variant="outline"
@@ -47,7 +47,7 @@ const BookingActions = ({
 				<Button
 					size="sm"
 					onClick={() => onReview(booking._id)}
-					className="ml-auto"
+					className="sm:ml-auto"
 					disabled={booking.reviewId}
 				>
 					<MessageSquareMore className="mr-1" />
