@@ -65,7 +65,9 @@ function Navigation() {
 					>
 						<img
 							src={
-								theme === "dark"
+								theme === "dark" ||
+								(theme === "system" &&
+									window.matchMedia("(prefers-color-scheme: dark)").matches)
 									? "/assets/staygenius-logo-white.png"
 									: "/assets/staygenius-logo.png"
 							}
