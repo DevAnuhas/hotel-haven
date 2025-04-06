@@ -1,5 +1,5 @@
 {
-	"name": "aidf-4-back-end",
+	"name": "stay-genius-api",
 	"version": "1.0.0",
 	"main": "index.ts",
 	"scripts": {

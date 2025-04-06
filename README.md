@@ -70,8 +70,8 @@ StayGenius is a smart hotel booking platform that uses AI-powered search and rec
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/AnuhasDev/hotel-haven.git
-cd hotel-haven
+git clone https://github.com/AnuhasDev/stay-genius.git
+cd stay-genius
 ```
 
 2. Install dependencies for both frontend and backend:
