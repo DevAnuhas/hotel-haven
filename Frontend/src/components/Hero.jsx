@@ -55,10 +55,10 @@ export default function Hero() {
 					<br />
 					Recommendations
 				</h1>
-				<p className="text-md sm:text-lg md:text-xl font-light mb-12 max-w-2xl">
+				<p className="text-md sm:text-lg font-light mb-12 max-w-xl">
 					Welcome to our AI-powered hotel recommendation engine, where our
-					cutting-edge algorithms analyze your preferences and past bookings to
-					provide you the perfect accommodations.
+					cutting-edge algorithms analyze your preferences to provide you the
+					perfect accommodations.
 				</p>
 				<form
 					onSubmit={handleSearch}
@@ -73,7 +73,7 @@ export default function Hero() {
 					<h2 className="text-4xl md:text-5xl xl:text-6xl font-bold mb-2 md:mb-4">
 						12k+
 					</h2>
-					<p className="text-md sm:text-lg md:text-xl font-light max-w-2xl">
+					<p className="text-md sm:text-lg font-light max-w-2xl">
 						Satisfied Visitors
 					</p>
 				</div>
@@ -81,7 +81,7 @@ export default function Hero() {
 					<h2 className="text-4xl md:text-5xl xl:text-6xl font-bold mb-2 md:mb-4">
 						86k+
 					</h2>
-					<p className="text-md sm:text-lg md:text-xl font-light max-w-2xl">
+					<p className="text-md sm:text-lg font-light max-w-2xl">
 						Amazing Reviews
 					</p>
 				</div>
@@ -89,7 +89,7 @@ export default function Hero() {
 					<h2 className="text-4xl md:text-5xl xl:text-6xl font-bold mb-2 md:mb-4">
 						27k+
 					</h2>
-					<p className="text-md sm:text-lg md:text-xl font-light max-w-2xl">
+					<p className="text-md sm:text-lg font-light max-w-2xl">
 						Bookings Made
 					</p>
 				</div>
@@ -100,7 +100,7 @@ export default function Hero() {
 					alt="Hero Background"
 					className="w-full h-full object-cover"
 				/>
-				<div className="absolute inset-0 w-full h-full bg-black/75"></div>
+				<div className="absolute inset-0 w-full h-full transition-colors ease-in-out duration-300 bg-black/60 dark:bg-black/75"></div>
 			</div>
 		</div>
 	);

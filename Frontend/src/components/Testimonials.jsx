@@ -59,12 +59,12 @@ export default function Testimonials() {
 	);
 
 	return (
-		<section className="container mx-auto w-full py-6 md:py-12 lg:py-16">
+		<section className="container mx-auto px-8 py-20 md:py-24">
 			<div className="space-y-3">
-				<h2 className="mx-auto before:text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+				<h2 className="text-3xl font-bold sm:text-4xl md:text-5xl">
 					What Our Customers Say
 				</h2>
-				<p className="mx-auto text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+				<p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
 					Hear from our satisfied customers about their experience with our
 					products and services.
 				</p>
@@ -82,12 +82,12 @@ export default function Testimonials() {
 					{testimonials.map((testimonial, index) => (
 						<CarouselItem
 							key={index}
-							className="md:basis-1/3 lg:basis-1/3 xl:basis-1/3 pb-4 select-none"
+							className="md:basis-2/3 lg:basis-1/3 xl:basis-1/3 pb-4 select-none"
 						>
 							<div className="p-1 flex h-full">
 								<div
 									key={index}
-									className="flex flex-col gap-4 rounded-xl bg-background p-6 border-t-2 border-gray-200 shadow-md transition-all hover:shadow-lg hover:-translate-y-1"
+									className="flex flex-col gap-4 rounded-xl bg-background p-6 border shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
 								>
 									<div className="flex items-center gap-4">
 										<Avatar className="h-12 w-12 border">
