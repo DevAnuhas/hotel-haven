@@ -102,7 +102,7 @@ const AccountPage = () => {
 	};
 
 	return (
-		<div className="container w-full py-16 mt-12 mx-auto">
+		<div className="container px-8 w-full py-16 mt-12 mx-auto">
 			<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
 				<div>
 					<h1 className="text-3xl font-bold">My Account</h1>
@@ -137,7 +137,7 @@ const AccountPage = () => {
 								onValueChange={setSelectedTab}
 								className="space-y-4"
 							>
-								<TabsList className="grid grid-cols-3 md:grid-cols-6 lg:w-[600px]">
+								<TabsList className="grid grid-cols-3 md:grid-cols-6 lg:w-[600px] h-fit rounded-[1rem] md:rounded-full">
 									<TabsTrigger value="all">All</TabsTrigger>
 									<TabsTrigger value="pending">Pending</TabsTrigger>
 									<TabsTrigger value="confirmed">Confirmed</TabsTrigger>

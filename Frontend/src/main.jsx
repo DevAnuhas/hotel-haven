@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
-import "./index.css";
+import "@/index.css";
 
-import { store } from "./lib/store";
+import { store } from "@/lib/store";
 import { Provider } from "react-redux";
 import { ClerkProvider } from "@clerk/clerk-react";
 

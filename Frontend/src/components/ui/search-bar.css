@@ -161,7 +161,7 @@
 	transform: translateY(-50%);
 }
 
-.searchBorder::before {
+/* .searchBorder::before {
 	content: "";
 
 	text-align: center;
@@ -183,7 +183,7 @@
 		rgba(0, 0, 0, 0) 100%
 	);
 	animation: rotate 4s linear infinite;
-}
+} */
 #main {
 	position: relative;
 	width: 100%;

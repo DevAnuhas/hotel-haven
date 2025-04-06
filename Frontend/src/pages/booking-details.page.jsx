@@ -115,7 +115,7 @@ export default function BookingDetailsPage() {
 	};
 
 	return (
-		<div className="container w-full py-16 mt-12 mx-auto max-w-4xl">
+		<div className="container w-full py-16 px-8 mt-12 mx-auto max-w-4xl">
 			<div className="flex items-center mb-6">
 				<Button variant="ghost" size="sm" asChild className="mr-2">
 					<Link to="/account">
@@ -139,11 +139,11 @@ export default function BookingDetailsPage() {
 				</CardHeader>
 				<CardContent className="pt-6">
 					<div className="flex flex-col md:flex-row gap-6 items-start">
-						<div className="relative h-32 w-full md:w-48 rounded-md overflow-hidden">
+						<div className="relative flex items-center h-64 md:h-32 w-full md:w-48 rounded-md overflow-hidden">
 							<img
 								src={booking.hotel?.image || "/placeholder.svg"}
 								alt={booking.hotel?.name || "Hotel"}
-								className="object-cover"
+								className="object-cover h-full w-full"
 							/>
 						</div>
 						<div className="flex-1">

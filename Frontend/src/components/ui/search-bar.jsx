@@ -23,10 +23,10 @@ const Input = () => {
 					<div className="searchBorder rounded-full md:w-[194px] w-[130px] h-[calc(100%-15px)]" />
 					<Button
 						type="submit"
-						className="search-button rounded-full w-32 md:w-48 h-[calc(100%-16px)] flex items-center  gap-x-2 hover:bg-[rgb(23, 23, 23)]"
+						className="search-button rounded-full w-32 md:w-48 h-[calc(100%-16px)] flex items-center gap-x-2 bg-primary dark:bg-primary-foreground"
 					>
 						<Sparkles className="w-5 h-5 mr-2 animate-pulse text-sky-400" />
-						<span className="md:text-lg">AI Search</span>
+						<span className="md:text-lg text-white">AI Search</span>
 					</Button>
 				</div>
 			</div>
