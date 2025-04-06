@@ -3,6 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { HotelRating } from "@/components/HotelRating";
 import {
 	StarIcon,
 	MapPinIcon,
@@ -43,14 +44,14 @@ export function HotelCard({ hotel }) {
 	};
 
 	return (
-		<Card className="overflow-hidden">
+		<Card className="group overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
 			<CardContent className="@container p-0">
 				<div className="grid @md:grid-cols-3 gap-4">
 					<div className="relative aspect-[16/9] overflow-hidden flex justify-center w-full h-full">
 						<img
 							src={hotel.images.main || "/assets/placeholder.svg"}
 							alt={hotel.name}
-							className="object-cover w-full h-full"
+							className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105 ease-in-out"
 						/>
 						{hotel.matchScore && (
 							<Badge className="absolute left-4 top-4">
@@ -80,20 +81,7 @@ export function HotelCard({ hotel }) {
 									</span>
 								</div>
 							</div>
-
-							<div className="text-right">
-								<div className="flex items-center justify-end gap-1 mb-1">
-									<Badge variant="secondary" className="text-lg font-bold">
-										{hotel.rating.average}
-									</Badge>
-									<span className="text-sm font-medium">
-										{hotel.rating.category}
-									</span>
-								</div>
-								<p className="text-xs text-muted-foreground">
-									{hotel.rating.count} reviews
-								</p>
-							</div>
+							<HotelRating rating={hotel.rating} size={"sm"} />
 						</div>
 
 						<p className="line-clamp-2 mb-4 text-muted-foreground">
@@ -133,7 +121,7 @@ export function HotelCardSkeleton() {
 	return (
 		<Card className="overflow-hidden">
 			<CardContent className="p-0">
-				<div className="grid @md:grid-cols-3 gap-4">
+				<div className="grid gap-4">
 					<div className="relative aspect-[16/9] overflow-hidden flex justify-center w-full h-full">
 						<Skeleton className="w-full h-full" />
 					</div>
@@ -144,9 +132,12 @@ export function HotelCardSkeleton() {
 								<Skeleton className="h-6 w-28 mb-1" />
 								<Skeleton className="h-4 w-24" />
 							</div>
-							<div className="text-right">
-								<Skeleton className="h-6 w-10 mb-1" />
-								<Skeleton className="h-4 w-16" />
+							<div className="flex items-center justify-end gap-3">
+								<div className="flex flex-col items-end gap-1">
+									<Skeleton className="h-3 w-16" />
+									<Skeleton className="h-2 w-20" />
+								</div>
+								<Skeleton className="h-8 w-8" />
 							</div>
 						</div>
 						<Skeleton className="h-4 w-full mb-4" />

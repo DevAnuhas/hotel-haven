@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useGetHotelByIdQuery } from "@/lib/api";
 import { differenceInDays, addDays } from "date-fns";
+import { HotelRating } from "@/components/HotelRating";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { GuestSelector } from "@/components/ui/guest-selector";
 import { Button } from "@/components/ui/button";
@@ -49,7 +50,7 @@ export default function HotelDetailsPage() {
 
 	if (isLoading)
 		return (
-			<div className="container mx-auto px-4 py-8 min-h-screen mt-24">
+			<div className="container mx-auto px-8 py-16 mt-12 min-h-screens">
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 					{/* Left Section */}
 					<div className="lg:col-span-2">
@@ -61,9 +62,12 @@ export default function HotelDetailsPage() {
 									<Skeleton className="h-5 w-32 mb-2" />
 									<Skeleton className="h-4 w-64" />
 								</div>
-								<div className="text-right">
-									<Skeleton className="h-8 w-16 mb-1" />
-									<Skeleton className="h-4 w-32" />
+								<div className="flex items-center justify-end gap-3">
+									<div className="flex flex-col items-end gap-1">
+										<Skeleton className="h-4 w-20" />
+										<Skeleton className="h-3 w-24" />
+									</div>
+									<Skeleton className="h-10 w-10" />
 								</div>
 							</div>
 
@@ -71,11 +75,11 @@ export default function HotelDetailsPage() {
 							<Skeleton className="relative aspect-[16/9] w-full rounded-lg mb-4" />
 
 							{/* Gallery */}
-							<div className="grid grid-cols-4 gap-2">
+							<div className="hidden sm:flex space-x-2 overflow-x-auto pb-2">
 								{[...Array(4)].map((_, index) => (
 									<Skeleton
 										key={index}
-										className="relative aspect-square w-full rounded-lg"
+										className="relative h-16 w-24 flex-shrink-0 overflow-hidden rounded-mdrelative aspect-square rounded-lg"
 									/>
 								))}
 							</div>
@@ -98,10 +102,7 @@ export default function HotelDetailsPage() {
 									{/* Check-in/Check-out */}
 									<div>
 										<Skeleton className="h-4 w-32 mb-2" />
-										<div className="grid grid-cols-2 gap-2">
-											<Skeleton className="h-10 w-full rounded-md" />
-											<Skeleton className="h-10 w-full rounded-md" />
-										</div>
+										<Skeleton className="h-10 w-full rounded-md" />
 									</div>
 
 									{/* Guests */}
@@ -129,8 +130,6 @@ export default function HotelDetailsPage() {
 									</div>
 
 									<Skeleton className="h-10 w-full" />
-
-									<Skeleton className="h-4 w-48 mx-auto" />
 								</div>
 							</CardContent>
 						</Card>
@@ -188,7 +187,7 @@ export default function HotelDetailsPage() {
 	const stars = Array(hotel.starRating).fill(0);
 
 	return (
-		<div className="container mx-auto py-16 mt-12">
+		<div className="container mx-auto px-8 py-16 mt-12">
 			<div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 				<div className="lg:col-span-2">
 					<div className="mb-6">
@@ -213,23 +212,7 @@ export default function HotelDetailsPage() {
 									</span>
 								</div>
 							</div>
-
-							<div className="text-right">
-								<div className="flex items-center justify-end gap-2 mb-1">
-									<Badge
-										variant="secondary"
-										className="text-2xl font-bold px-3 py-1"
-									>
-										{hotel.rating.average.toFixed(1)}
-									</Badge>
-									<div className="flex flex-col">
-										<span className="font-medium">{hotel.rating.category}</span>
-										<span className="text-sm text-muted-foreground">
-											{hotel.rating.count} reviews
-										</span>
-									</div>
-								</div>
-							</div>
+							<HotelRating rating={hotel.rating} />
 						</div>
 
 						<HotelImageCarousel
@@ -329,7 +312,7 @@ export default function HotelDetailsPage() {
 						</TabsContent>
 
 						<TabsContent value="rooms" className="pt-4">
-							<div className="grid grid-cols-2 gap-8">
+							<div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
 								{hotel.rooms.map((room, index) => (
 									<Card
 										key={index}
@@ -410,7 +393,7 @@ export default function HotelDetailsPage() {
 
 						<TabsContent value="amenities" className="pt-4">
 							<div>
-								<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+								<div className="grid grid-cols-[auto,auto] sm:grid-cols-[auto,auto,auto] md:grid-cols-[auto,auto,auto,auto] gap-4">
 									{hotel.amenities.breakfastIncluded && (
 										<div className="flex items-center gap-2">
 											<Sandwich className="flex items-center justify-center w-8 h-8 p-2 rounded-full bg-muted" />

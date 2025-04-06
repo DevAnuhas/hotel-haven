@@ -196,10 +196,10 @@ export default function BookingConfirmation() {
 				<p>
 					Need help with your booking? Contact our support team at{" "}
 					<a
-						href="mailto:support@hotelhaven.com"
+						href="mailto:support@staygenius.com"
 						className="text-primary hover:underline"
 					>
-						support@hotelhaven.com
+						support@staygenius.com
 					</a>
 				</p>
 			</div>

@@ -57,27 +57,13 @@ export default function HotelListings() {
 		/>
 	));
 
-	if (isError) {
-		console.log(error);
-		return (
-			<div className="container mx-auto px-4 py-8 min-h-screen mt-24">
-				<div className="text-center">
-					<h1 className="text-2xl font-bold mb-4">Error Loading Hotels</h1>
-					<p className="text-muted-foreground">
-						{error.status + ": " + error.data.message}
-					</p>
-				</div>
-			</div>
-		);
-	}
-
 	return (
 		<section
 			id="hotel-listings"
-			className="container w-full py-6 md:py-12 lg:py-16 mx-auto"
+			className="container px-8 py-20 md:py-24 mx-auto"
 		>
 			<div className="mb-6 space-y-3">
-				<h3 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+				<h3 className="text-3xl font-bold sm:text-4xl md:text-5xl">
 					{isFetchingSearch || isLoading
 						? "Your experience is loading..."
 						: "Top hotels that matches your vibe"}
@@ -93,14 +79,14 @@ export default function HotelListings() {
 				</div>
 			</div>
 			<div className="flex gap-4 py-4">{sortingTab}</div>
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+			<div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mt-8">
 				{isFetchingSearch || isLoading ? (
 					Array.from({ length: 6 }, (_, index) => (
 						<HotelCardSkeleton key={index} />
 					))
 				) : (
 					<>
-						{isError && !searchResults && <p>{isError}</p>}
+						{isError && !searchResults && <p>{error}</p>}
 						{filteredHotels?.map((hotel) => (
 							<HotelCard key={hotel._id} hotel={hotel} />
 						)) || <p>No hotels found</p>}
