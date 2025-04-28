@@ -11,20 +11,21 @@ import { createEmbeddings } from "../application/embedding";
 import { retrieveHotels } from "../application/retrieve";
 import { isAuthenticated } from "./middlewares/authentication-middleware";
 import { isAdmin } from "./middlewares/authorization-middleware";
+import { apiLimiter } from "./middlewares/rate-limiter-middleware";
 
 const hotelRouter = express.Router();
 
-hotelRouter.post("/embeddings/create", createEmbeddings);
-hotelRouter.get("/search/retrieve", retrieveHotels);
+hotelRouter.post("/embeddings/create", apiLimiter, isAdmin, createEmbeddings);
+hotelRouter.get("/search/retrieve", apiLimiter, retrieveHotels);
 hotelRouter.get("/filters", getHotelFilterOptions);
 hotelRouter
 	.route("/")
-	.get(getHotels)
-	.post(isAuthenticated, isAdmin, createHotel);
+	.get(apiLimiter, getHotels)
+	.post(apiLimiter, isAuthenticated, isAdmin, createHotel);
 hotelRouter
 	.route("/:id")
-	.get(getHotelById)
-	.delete(isAuthenticated, isAdmin, deleteHotel)
-	.put(isAuthenticated, isAdmin, updateHotel);
+	.get(apiLimiter, getHotelById)
+	.delete(apiLimiter, isAuthenticated, isAdmin, deleteHotel)
+	.put(apiLimiter, isAuthenticated, isAdmin, updateHotel);
 
 export default hotelRouter;
