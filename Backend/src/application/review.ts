@@ -4,9 +4,7 @@ import ValidationError from "../domain/errors/validation-error";
 import UnauthorizedError from "../domain/errors/unauthorized-error";
 import Booking from "../infrastructure/schemas/Booking";
 import Review from "../infrastructure/schemas/Review";
-import Hotel from "../infrastructure/schemas/Hotel";
 import { CreateReviewDTO } from "../domain/dtos/review";
-import { log } from "console";
 
 export const createReview = async (
 	req: AuthenticatedRequest,
