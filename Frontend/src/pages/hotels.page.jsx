@@ -52,7 +52,9 @@ export function HotelsPage() {
 		isFetching,
 		isError,
 		error,
-	} = useGetHotelsQuery(filters);
+	} = useGetHotelsQuery(filters, {
+		refetchOnMountOrArgChange: 1,
+	});
 
 	// Get unique cities for the filter
 	const { data: filterOptions } = useGetHotelFilterOptionsQuery();
