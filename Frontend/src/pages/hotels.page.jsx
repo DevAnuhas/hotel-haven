@@ -49,7 +49,7 @@ export function HotelsPage() {
 
 	const {
 		data: hotelData,
-		isLoading,
+		isFetching,
 		isError,
 		error,
 	} = useGetHotelsQuery(filters);
@@ -233,7 +233,7 @@ export function HotelsPage() {
 				<div className="sm:col-span-2 lg:col-span-3">
 					<div className="mb-4 flex justify-between items-center">
 						<h2 className="text-xl font-semibold">
-							{isLoading
+							{isFetching
 								? "Loading..."
 								: `${total} ${total === 1 ? "hotel" : "hotels"} found`}
 						</h2>
@@ -250,7 +250,7 @@ export function HotelsPage() {
 						</Select>
 					</div>
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-						{isLoading ? (
+						{isFetching ? (
 							Array.from({ length: 6 }, (_, index) => (
 								<HotelCardSkeleton key={index} />
 							))
